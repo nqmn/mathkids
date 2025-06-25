@@ -105,7 +105,7 @@ A fun, interactive math practice game designed specifically for children aged 4-
 ### Option 2: Local Development
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/mathkids.git
+   git clone https://github.com/nqmn/mathkids.git
    cd mathkids
    ```
 2. Open `index.html` in your browser or serve with a local server:
