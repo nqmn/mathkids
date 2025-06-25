@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Adventure Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        h1, h2, h3, .fredoka {
+            font-family: 'Fredoka One', cursive;
+        }
+        .screen {
+            display: none;
+        }
+        .screen.active {
+            display: block;
+        }
+        .checkbox-label {
+            transition: all 0.2s ease-in-out;
+        }
+        .checkbox-label:hover {
+            transform: scale(1.05);
+        }
+        .correct-animation {
+            animation: correct 0.5s ease-in-out;
+        }
+        @keyframes correct {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2) rotate(5deg); background-color: #4ade80; }
+            100% { transform: scale(1); }
+        }
+        .incorrect-animation {
+            animation: incorrect 0.5s ease-in-out;
+        }
+        @keyframes incorrect {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body class="bg-blue-100 text-gray-800 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl p-6 md:p-10 space-y-6">
+
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen active text-center">
+            <h1 class="text-4xl md:text-6xl text-blue-600 fredoka mb-4">Math Adventure!</h1>
+            <p class="text-lg mb-6">Let's practice some math and have fun!</p>
+            <img src="https://placehold.co/400x200/a7f3d0/3b82f6?text=Welcome+Explorer!" class="mx-auto rounded-lg mb-6" alt="Welcome Image">
+            <div class="space-y-4">
+                <input type="text" id="name" placeholder="Enter your name" class="w-full p-3 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="number" id="age" placeholder="Enter your age" class="w-full p-3 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+             <button id="start-setup-btn" class="mt-6 w-full bg-green-500 hover:bg-green-600 text-white fredoka text-2xl py-3 rounded-lg transition-transform transform hover:scale-105">Let's Go!</button>
+        </div>
+
+        <!-- Setup Screen -->
+        <div id="setup-screen" class="screen">
+            <h2 class="text-3xl fredoka text-center text-blue-600 mb-6">Choose Your Challenge!</h2>
+            <div class="grid grid-cols-2 gap-4 text-center">
+                <div>
+                    <input type="checkbox" id="addition" value="+" class="hidden peer">
+                    <label for="addition" class="checkbox-label block p-6 bg-red-300 text-white rounded-lg cursor-pointer peer-checked:bg-red-500 peer-checked:ring-4 ring-red-200">
+                        <span class="text-4xl">+</span><br>Addition
+                    </label>
+                </div>
+                <div>
+                    <input type="checkbox" id="subtraction" value="-" class="hidden peer">
+                    <label for="subtraction" class="checkbox-label block p-6 bg-yellow-300 text-white rounded-lg cursor-pointer peer-checked:bg-yellow-500 peer-checked:ring-4 ring-yellow-200">
+                        <span class="text-4xl">-</span><br>Subtraction
+                    </label>
+                </div>
+                <div>
+                    <input type="checkbox" id="multiplication" value="*" class="hidden peer">
+                    <label for="multiplication" class="checkbox-label block p-6 bg-purple-300 text-white rounded-lg cursor-pointer peer-checked:bg-purple-500 peer-checked:ring-4 ring-purple-200">
+                        <span class="text-4xl">×</span><br>Multiplication
+                    </label>
+                </div>
+                <div>
+                    <input type="checkbox" id="division" value="/" class="hidden peer">
+                    <label for="division" class="checkbox-label block p-6 bg-indigo-300 text-white rounded-lg cursor-pointer peer-checked:bg-indigo-500 peer-checked:ring-4 ring-indigo-200">
+                        <span class="text-4xl">÷</span><br>Division
+                    </label>
+                </div>
+            </div>
+            <button id="start-game-btn" class="mt-8 w-full bg-blue-500 hover:bg-blue-600 text-white fredoka text-2xl py-3 rounded-lg transition-transform transform hover:scale-105">Start Game</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="flex justify-between items-center mb-4">
+                <div id="level-display" class="fredoka text-2xl text-blue-600">Level: 1</div>
+                <div id="timer-display" class="fredoka text-2xl text-red-500">Time: 30</div>
+            </div>
+             <div id="difficulty-display" class="text-center text-gray-500 mb-4">Difficulty: Easy</div>
+            <div id="question-container" class="text-center text-5xl md:text-7xl p-8 bg-gray-100 rounded-lg">
+                <span id="num1"></span>
+                <span id="operator"></span>
+                <span id="num2"></span>
+                <span> = ?</span>
+            </div>
+            <input type="number" id="answer" class="w-full text-4xl text-center mt-6 p-3 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your Answer">
+            <button id="submit-answer-btn" class="mt-4 w-full bg-green-500 hover:bg-green-600 text-white fredoka text-2xl py-3 rounded-lg transition-transform transform hover:scale-105">Submit</button>
+             <div id="feedback" class="text-center text-2xl mt-4 font-bold"></div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen text-center">
+            <h2 class="text-4xl fredoka text-blue-600 mb-2">Level Complete!</h2>
+            <p class="text-lg mb-6" id="results-name-display"></p>
+            <div class="bg-gray-100 p-6 rounded-lg space-y-4">
+                <div class="flex justify-between items-center text-xl">
+                    <span class="font-bold">Level Reached:</span>
+                    <span id="final-level" class="fredoka text-2xl text-green-600"></span>
+                </div>
+                <div class="flex justify-between items-center text-xl">
+                    <span class="font-bold">Score:</span>
+                    <span id="final-score" class="fredoka text-2xl text-green-600"></span>
+                </div>
+                <div class="flex justify-between items-center text-xl">
+                    <span class="font-bold">Accuracy:</span>
+                    <span id="final-accuracy" class="fredoka text-2xl text-green-600"></span>
+                </div>
+                <div class="flex flex-col items-center text-xl mt-4">
+                    <span class="font-bold mb-2">Math IQ Level*:</span>
+                    <div id="iq-level-display" class="fredoka text-3xl text-purple-600"></div>
+                </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-4">*This is a fun 'Math IQ' score for the game and not a real measure of intelligence.</p>
+            <button id="play-again-btn" class="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white fredoka text-2xl py-3 rounded-lg transition-transform transform hover:scale-105">Play Next Level!</button>
+        </div>
+
+    </div>
+
+    <script>
+        // DOM Elements
+        const screens = {
+            welcome: document.getElementById('welcome-screen'),
+            setup: document.getElementById('setup-screen'),
+            game: document.getElementById('game-screen'),
+            results: document.getElementById('results-screen'),
+        };
+        const nameInput = document.getElementById('name');
+        const ageInput = document.getElementById('age');
+        const startSetupBtn = document.getElementById('start-setup-btn');
+        const startGametBtn = document.getElementById('start-game-btn');
+        const submitAnswerBtn = document.getElementById('submit-answer-btn');
+        const playAgainBtn = document.getElementById('play-again-btn');
+        const answerInput = document.getElementById('answer');
+        
+        // Game State
+        let gameState = {
+            name: '',
+            age: 0,
+            level: 1,
+            difficulty: 1,
+            operators: [],
+            score: 0,
+            questions: [],
+            currentQuestionIndex: 0,
+            timer: 30,
+            timerInterval: null,
+            totalTimePerLevel: 30,
+        };
+
+        // --- Navigation ---
+        function showScreen(screenName) {
+            Object.values(screens).forEach(screen => screen.classList.remove('active'));
+            screens[screenName].classList.add('active');
+        }
+
+        startSetupBtn.addEventListener('click', () => {
+            gameState.name = nameInput.value.trim();
+            gameState.age = parseInt(ageInput.value);
+
+            if (!gameState.name || !gameState.age) {
+                alert('Please enter your name and age.');
+                return;
+            }
+            
+            // Set initial difficulty based on age
+            if (gameState.age <= 6) gameState.difficulty = 1;
+            else if (gameState.age <= 8) gameState.difficulty = 3;
+            else gameState.difficulty = 5;
+
+            showScreen('setup');
+        });
+
+        startGametBtn.addEventListener('click', () => {
+            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            gameState.operators = Array.from(checkedBoxes).map(box => box.value);
+
+            if (gameState.operators.length === 0) {
+                alert('Please choose at least one type of math problem!');
+                return;
+            }
+            startGame();
+        });
+
+        playAgainBtn.addEventListener('click', () => {
+            gameState.level++;
+            // Dynamic difficulty adjustment
+            const accuracy = (gameState.score / gameState.questions.length) * 100;
+            const avgTime = gameState.totalTimePerLevel - gameState.timer / gameState.questions.length;
+
+            if (accuracy >= 80 && avgTime < 5) {
+                gameState.difficulty += 1;
+            } else if (accuracy < 50 && gameState.difficulty > 1) {
+                gameState.difficulty -= 1;
+            }
+
+            startGame();
+        });
+        
+        // Auto-submit on Enter key press
+        answerInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent form submission
+                submitAnswerBtn.click();
+            }
+        });
+
+        // --- Game Logic ---
+        function startGame() {
+            gameState.score = 0;
+            gameState.currentQuestionIndex = 0;
+            gameState.timer = gameState.totalTimePerLevel;
+            generateQuestions();
+            
+            document.getElementById('level-display').innerText = `Level: ${gameState.level}`;
+            updateDifficultyDisplay();
+            
+            showScreen('game');
+            displayQuestion();
+            startTimer();
+        }
+        
+        function updateDifficultyDisplay() {
+            let difficultyText = 'Easy';
+            if (gameState.difficulty > 10) difficultyText = 'Genius';
+            else if (gameState.difficulty > 7) difficultyText = 'Hard';
+            else if (gameState.difficulty > 4) difficultyText = 'Medium';
+            document.getElementById('difficulty-display').innerText = `Difficulty: ${difficultyText}`;
+        }
+
+        function generateQuestions() {
+            gameState.questions = [];
+            const numQuestions = 5; // 5 questions per level
+            
+            for (let i = 0; i < numQuestions; i++) {
+                const operator = gameState.operators[Math.floor(Math.random() * gameState.operators.length)];
+                let num1, num2, answer;
+                
+                // Adjust number range based on difficulty
+                const maxNum = gameState.difficulty * 5;
+                const minNum = gameState.difficulty > 2 ? gameState.difficulty - 2 : 1;
+
+                if (operator === '+') {
+                    num1 = Math.floor(Math.random() * maxNum) + minNum;
+                    num2 = Math.floor(Math.random() * maxNum) + minNum;
+                    answer = num1 + num2;
+                } else if (operator === '-') {
+                    const a = Math.floor(Math.random() * maxNum) + minNum;
+                    const b = Math.floor(Math.random() * maxNum) + minNum;
+                    num1 = Math.max(a, b);
+                    num2 = Math.min(a, b);
+                    answer = num1 - num2;
+                } else if (operator === '*') {
+                    num1 = Math.floor(Math.random() * (maxNum / 2 > 10 ? 10 : maxNum / 2)) + 1;
+                    num2 = Math.floor(Math.random() * (maxNum / 2 > 10 ? 10 : maxNum / 2)) + 1;
+                    answer = num1 * num2;
+                } else if (operator === '/') {
+                    const divisor = Math.floor(Math.random() * (maxNum / 2 > 10 ? 10 : maxNum / 2)) + 1;
+                    answer = Math.floor(Math.random() * (maxNum / 2 > 10 ? 10 : maxNum / 2)) + 1;
+                    num1 = divisor * answer;
+                    num2 = divisor;
+                }
+                gameState.questions.push({ num1, num2, operator, answer });
+            }
+        }
+
+        function displayQuestion() {
+            if (gameState.currentQuestionIndex >= gameState.questions.length) {
+                endLevel();
+                return;
+            }
+            
+            const q = gameState.questions[gameState.currentQuestionIndex];
+            document.getElementById('num1').innerText = q.num1;
+            document.getElementById('operator').innerText = q.operator === '*' ? '×' : q.operator;
+            document.getElementById('num2').innerText = q.num2;
+            answerInput.value = '';
+            answerInput.focus();
+        }
+
+        submitAnswerBtn.addEventListener('click', () => {
+            const userAnswer = parseInt(answerInput.value);
+            const correctAnswer = gameState.questions[gameState.currentQuestionIndex].answer;
+            const feedbackEl = document.getElementById('feedback');
+            
+            feedbackEl.classList.remove('correct-animation', 'incorrect-animation', 'text-green-500', 'text-red-500');
+            
+            if (userAnswer === correctAnswer) {
+                gameState.score++;
+                feedbackEl.innerText = "Correct!";
+                feedbackEl.classList.add('text-green-500', 'correct-animation');
+            } else {
+                feedbackEl.innerText = `Oops! The answer was ${correctAnswer}`;
+                feedbackEl.classList.add('text-red-500', 'incorrect-animation');
+            }
+            
+            // Move to next question after a short delay
+            setTimeout(() => {
+                feedbackEl.innerText = "";
+                gameState.currentQuestionIndex++;
+                displayQuestion();
+            }, 1000);
+        });
+
+        function startTimer() {
+            document.getElementById('timer-display').innerText = `Time: ${gameState.timer}`;
+            clearInterval(gameState.timerInterval);
+            gameState.timerInterval = setInterval(() => {
+                gameState.timer--;
+                document.getElementById('timer-display').innerText = `Time: ${gameState.timer}`;
+                if (gameState.timer <= 0) {
+                    endLevel();
+                }
+            }, 1000);
+        }
+
+        function endLevel() {
+            clearInterval(gameState.timerInterval);
+            displayResults();
+            showScreen('results');
+        }
+        
+        function displayResults() {
+            const accuracy = (gameState.questions.length > 0 ? (gameState.score / gameState.questions.length) * 100 : 0).toFixed(0);
+            const totalScore = gameState.score * 10 * gameState.difficulty + gameState.timer;
+
+            document.getElementById('results-name-display').innerText = `Great job, ${gameState.name}!`;
+            document.getElementById('final-level').innerText = gameState.level;
+            document.getElementById('final-score').innerText = totalScore;
+            document.getElementById('final-accuracy').innerText = `${accuracy}%`;
+            
+            // Simplified "IQ Level" calculation
+            const iqScore = (totalScore / (gameState.level * 10)) + (accuracy / 10) + gameState.difficulty;
+            let iqLevel = 'Budding Brainiac';
+            if (iqScore > 40) iqLevel = 'Math Magician';
+            if (iqScore > 60) iqLevel = 'Number Ninja';
+            if (iqScore > 80) iqLevel = 'Calculation King';
+            if (iqScore > 100) iqLevel = 'Genius Guru';
+            
+            document.getElementById('iq-level-display').innerText = iqLevel;
+        }
+
+        // Initial setup
+        showScreen('welcome');
+    </script>
+</body>
+</html>

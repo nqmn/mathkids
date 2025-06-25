@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Math Adventure Game for Kids! 🌟</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        h1, h2, h3, .fredoka {
+            font-family: 'Fredoka One', cursive;
+        }
+        .screen {
+            display: none;
+        }
+        .screen.active {
+            display: block;
+        }
+        .checkbox-label {
+            transition: all 0.3s ease-in-out;
+        }
+        .checkbox-label:hover {
+            transform: scale(1.08) rotate(2deg);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .correct-animation {
+            animation: correct 0.8s ease-in-out;
+        }
+        @keyframes correct {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1) rotate(5deg); background-color: #dcfce7; }
+            50% { transform: scale(1.15) rotate(-3deg); background-color: #bbf7d0; }
+            75% { transform: scale(1.05) rotate(2deg); background-color: #dcfce7; }
+            100% { transform: scale(1); }
+        }
+        .incorrect-animation {
+            animation: incorrect 0.6s ease-in-out;
+        }
+        @keyframes incorrect {
+            0%, 100% { transform: translateX(0); }
+            15% { transform: translateX(-12px) rotate(-2deg); }
+            30% { transform: translateX(12px) rotate(2deg); }
+            45% { transform: translateX(-8px) rotate(-1deg); }
+            60% { transform: translateX(8px) rotate(1deg); }
+            75% { transform: translateX(-4px); }
+        }
+
+        /* Confetti Animation */
+        .confetti {
+            position: fixed;
+            top: -10px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f39c12;
+            animation: confetti-fall 3s linear infinite;
+        }
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+        /* Hide spin buttons on number inputs */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        input[type=number] {
+          -moz-appearance: textfield;
+        }
+
+        /* Enhanced Button Styles */
+        .fun-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+        .fun-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .fun-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Keypad Styles with Enhanced Animation */
+        .keypad-btn {
+            @apply text-white rounded-2xl text-3xl fredoka transition-all duration-300 transform shadow-lg border-b-4;
+            background-size: 100% 200%;
+            position: relative;
+            overflow: hidden;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+            min-height: 60px;
+        }
+
+        @media (min-width: 640px) {
+            .keypad-btn {
+                width: 70px;
+                height: 70px;
+                min-width: 70px;
+                min-height: 70px;
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .keypad-btn {
+                width: 80px;
+                height: 80px;
+                min-width: 80px;
+                min-height: 80px;
+                font-size: 1.75rem;
+            }
+        }
+
+        .keypad-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+        }
+        .keypad-btn:active {
+            transform: translateY(1px) scale(0.95);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+
+
+        .btn-pink {
+            @apply bg-pink-500 border-pink-700;
+            background-image: linear-gradient(45deg, #ec4899, #f472b6 50%, #f9a8d4 50%);
+        }
+        .btn-pink:hover {
+             background-position: 0 100%;
+        }
+
+        .btn-green {
+            @apply bg-emerald-500 border-emerald-700;
+             background-image: linear-gradient(45deg, #10b981, #34d399 50%, #6ee7b7 50%);
+        }
+        .btn-green:hover {
+             background-position: 0 100%;
+        }
+
+        .btn-blue {
+            @apply bg-blue-500 border-blue-700;
+            background-image: linear-gradient(45deg, #3b82f6, #60a5fa 50%, #93c5fd 50%);
+        }
+         .btn-blue:hover {
+             background-position: 0 100%;
+        }
+
+        .btn-orange {
+            @apply bg-orange-500 border-orange-700;
+            background-image: linear-gradient(45deg, #f97316, #fb923c 50%, #fdba74 50%);
+        }
+        .btn-orange:hover {
+             background-position: 0 100%;
+        }
+
+        .btn-purple {
+            @apply bg-purple-500 border-purple-700;
+            background-image: linear-gradient(45deg, #a855f7, #c084fc 50%, #d8b4fe 50%);
+        }
+        .btn-purple:hover {
+             background-position: 0 100%;
+        }
+
+        .btn-yellow {
+            @apply bg-yellow-400 border-yellow-600 text-gray-800;
+            background-image: linear-gradient(45deg, #facc15, #fde047 50%, #fef08a 50%);
+        }
+        .btn-yellow:hover {
+             background-position: 0 100%;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+            background-size: 200% 100%;
+            animation: rainbow 3s ease infinite;
+        }
+        @keyframes rainbow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Star Rating */
+        .star {
+            color: #fbbf24;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+    </style>
+</head>
+<body class="text-gray-800 flex items-center justify-center min-h-screen p-2 sm:p-4">
+
+    <div class="w-full max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 md:p-10 space-y-6 border-4 border-yellow-300">
+
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen active text-center">
+            <h1 class="text-4xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 fredoka mb-4">
+                🎯 Math Adventure! 🌟
+            </h1>
+            <p class="text-xl mb-6 text-gray-700">🚀 Let's practice some math and have amazing fun! 🎉</p>
+            <div class="bg-gradient-to-r from-yellow-200 to-pink-200 rounded-2xl p-6 mb-6">
+                <div class="text-6xl mb-4">🧮✨🎈</div>
+                <p class="text-lg font-semibold text-gray-700">Welcome, young mathematician! 🤓</p>
+                <p class="text-sm text-gray-600 mt-2">Get ready for an epic math journey! 🗺️</p>
+            </div>
+            <div class="space-y-4">
+                <div class="relative">
+                    <span class="absolute left-3 top-3 text-2xl">👤</span>
+                    <input type="text" id="name" placeholder="What's your awesome name?" class="w-full pl-12 p-3 border-2 border-purple-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg">
+                </div>
+                <div class="relative">
+                    <span class="absolute left-3 top-3 text-2xl">🎂</span>
+                    <input type="number" id="age" placeholder="How old are you?" class="w-full pl-12 p-3 border-2 border-purple-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg">
+                </div>
+            </div>
+             <button id="start-setup-btn" class="fun-btn mt-6 w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white fredoka text-2xl py-4 rounded-xl shadow-lg">
+                🚀 Let's Go on an Adventure! 🌟
+             </button>
+        </div>
+
+        <!-- Setup Screen -->
+        <div id="setup-screen" class="screen">
+            <h2 class="text-3xl fredoka text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-2">
+                🎮 Choose Your Math Powers! ⚡
+            </h2>
+            <p class="text-center text-gray-600 mb-6">Pick the math skills you want to practice! 🎯</p>
+            <div class="grid grid-cols-2 gap-4 text-center">
+                <div>
+                    <input type="checkbox" id="addition" value="+" class="hidden peer">
+                    <label for="addition" class="checkbox-label block p-6 bg-gradient-to-br from-red-400 to-red-600 text-white rounded-2xl cursor-pointer peer-checked:from-red-500 peer-checked:to-red-700 peer-checked:ring-4 ring-red-200 shadow-lg">
+                        <div class="text-5xl mb-2">➕</div>
+                        <div class="fredoka text-xl">Addition</div>
+                        <div class="text-sm opacity-90">Add it up! 🔢</div>
+                    </label>
+                </div>
+                <div>
+                    <input type="checkbox" id="subtraction" value="-" class="hidden peer">
+                    <label for="subtraction" class="checkbox-label block p-6 bg-gradient-to-br from-yellow-400 to-orange-500 text-white rounded-2xl cursor-pointer peer-checked:from-yellow-500 peer-checked:to-orange-600 peer-checked:ring-4 ring-yellow-200 shadow-lg">
+                        <div class="text-5xl mb-2">➖</div>
+                        <div class="fredoka text-xl">Subtraction</div>
+                        <div class="text-sm opacity-90">Take away! 🎯</div>
+                    </label>
+                </div>
+                <div>
+                    <input type="checkbox" id="multiplication" value="*" class="hidden peer">
+                    <label for="multiplication" class="checkbox-label block p-6 bg-gradient-to-br from-purple-400 to-purple-600 text-white rounded-2xl cursor-pointer peer-checked:from-purple-500 peer-checked:to-purple-700 peer-checked:ring-4 ring-purple-200 shadow-lg">
+                        <div class="text-5xl mb-2">✖️</div>
+                        <div class="fredoka text-xl">Multiplication</div>
+                        <div class="text-sm opacity-90">Times tables! 🚀</div>
+                    </label>
+                </div>
+                <div>
+                    <input type="checkbox" id="division" value="/" class="hidden peer">
+                    <label for="division" class="checkbox-label block p-6 bg-gradient-to-br from-indigo-400 to-indigo-600 text-white rounded-2xl cursor-pointer peer-checked:from-indigo-500 peer-checked:to-indigo-700 peer-checked:ring-4 ring-indigo-200 shadow-lg">
+                        <div class="text-5xl mb-2">➗</div>
+                        <div class="fredoka text-xl">Division</div>
+                        <div class="text-sm opacity-90">Share equally! 🎪</div>
+                    </label>
+                </div>
+            </div>
+            <button id="start-game-btn" class="fun-btn mt-8 w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white fredoka text-2xl py-4 rounded-xl shadow-lg">
+                🎉 Start the Math Adventure! 🌟
+            </button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <!-- Progress and Stats Bar -->
+            <div class="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-4 mb-6">
+                <div class="flex justify-between items-center mb-3">
+                    <div id="difficulty-display" class="fredoka text-lg md:text-xl text-purple-600 flex-1 text-left">
+                        🎯 Level: Easy
+                    </div>
+                    <div id="score-display" class="fredoka text-lg md:text-xl text-green-600 flex-1 text-center">
+                        ⭐ Score: 0
+                    </div>
+                    <div class="flex-1 text-right">
+                        <button id="stop-game-btn" class="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white fredoka px-4 py-2 rounded-xl shadow-lg transition-all duration-300">
+                            🛑 Finish
+                        </button>
+                    </div>
+                </div>
+                <div id="question-timer-display" class="fredoka text-lg text-orange-600 text-center">
+                    ⏱️ Time: 0.0s
+                </div>
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-200 rounded-full h-3 mt-3">
+                    <div id="progress-bar" class="progress-bar h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Question Display -->
+            <div id="question-container" class="text-center text-5xl md:text-7xl p-6 md:p-8 bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl border-4 border-blue-200 shadow-lg">
+                <div class="mb-4">
+                    <span id="num1" class="text-blue-600"></span>
+                    <span id="operator" class="text-purple-600 mx-2"></span>
+                    <span id="num2" class="text-blue-600"></span>
+                    <span class="text-gray-600"> = </span>
+                    <span class="text-green-600">?</span>
+                </div>
+                <div id="stars-display" class="text-3xl"></div>
+            </div>
+
+            <!-- Answer Input -->
+            <div class="relative mt-6">
+                <span class="absolute left-4 top-4 text-3xl">💭</span>
+                <input type="number" id="answer" class="w-full pl-16 pr-16 text-4xl text-center p-4 border-4 border-purple-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-purple-400 focus:border-purple-500 bg-gradient-to-r from-white to-purple-50" placeholder="Your answer...">
+                <button id="backspace-btn" class="absolute right-2 top-2 w-12 h-12 bg-red-500 hover:bg-red-600 text-white rounded-xl text-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg">
+                    ←
+                </button>
+            </div>
+
+            <!-- Fun Keypad -->
+            <div id="keypad" class="mt-6 w-full max-w-md mx-auto">
+                <!-- Number Grid -->
+                <div class="grid grid-cols-3 gap-3 mb-3 justify-items-center">
+                    <button class="keypad-btn btn-blue" data-key="1">1</button>
+                    <button class="keypad-btn btn-green" data-key="2">2</button>
+                    <button class="keypad-btn btn-pink" data-key="3">3</button>
+                    <button class="keypad-btn btn-orange" data-key="4">4</button>
+                    <button class="keypad-btn btn-purple" data-key="5">5</button>
+                    <button class="keypad-btn btn-blue" data-key="6">6</button>
+                    <button class="keypad-btn btn-green" data-key="7">7</button>
+                    <button class="keypad-btn btn-pink" data-key="8">8</button>
+                    <button class="keypad-btn btn-orange" data-key="9">9</button>
+                </div>
+                <!-- Bottom Row -->
+                <div class="grid grid-cols-3 gap-3 justify-items-center">
+                    <div></div> <!-- Empty space -->
+                    <button class="keypad-btn btn-purple" data-key="0">0</button>
+                    <div></div> <!-- Empty space -->
+                </div>
+            </div>
+
+            <button id="submit-answer-btn" class="fun-btn mt-6 w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white fredoka text-2xl py-4 rounded-2xl shadow-lg">
+                🚀 Submit Answer! ✨
+            </button>
+            <div id="feedback" class="text-center text-3xl mt-6 font-bold h-12 fredoka"></div>
+
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen text-center">
+            <h2 class="text-4xl fredoka text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-500 mb-2">
+                🎉 Amazing Job! 🌟
+            </h2>
+            <p class="text-xl mb-6 text-gray-700" id="results-name-display"></p>
+
+            <!-- Achievement Display -->
+            <div class="bg-gradient-to-br from-yellow-100 to-orange-100 p-6 rounded-2xl space-y-6 border-4 border-yellow-300 shadow-lg">
+                <div class="text-6xl mb-4">🏆</div>
+
+                <div class="bg-white rounded-xl p-4 shadow-md">
+                    <div class="flex justify-between items-center text-xl">
+                        <span class="font-bold text-gray-700">🎯 Total Score:</span>
+                        <span id="final-score" class="fredoka text-3xl text-green-600"></span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-4 shadow-md">
+                    <div class="flex flex-col items-center text-xl">
+                        <span class="font-bold mb-2 text-gray-700">🧠 Your Math Power Level:</span>
+                        <div id="iq-level-display" class="fredoka text-6xl text-purple-600"></div>
+                        <div id="achievement-badge" class="text-4xl mt-2"></div>
+                        <div id="achievement-text" class="text-lg text-gray-600 mt-2 fredoka"></div>
+                    </div>
+                </div>
+
+                <div id="stats-display" class="bg-white rounded-xl p-4 shadow-md">
+                    <h3 class="fredoka text-xl text-gray-700 mb-3">📊 Your Stats:</h3>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div class="text-center">
+                            <div class="text-2xl">✅</div>
+                            <div class="font-bold" id="correct-count">0</div>
+                            <div class="text-gray-600">Correct</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl">⚡</div>
+                            <div class="font-bold" id="avg-time">0s</div>
+                            <div class="text-gray-600">Avg Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-xs text-gray-500 mt-4 italic">
+                💡 This is a fun game score to celebrate your math skills! Keep practicing to get even better! 🚀
+            </p>
+            <button id="play-again-btn" class="fun-btn mt-6 w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white fredoka text-2xl py-4 rounded-2xl shadow-lg">
+                🎮 Play Again! 🌟
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // DOM Elements
+        const screens = {
+            welcome: document.getElementById('welcome-screen'),
+            setup: document.getElementById('setup-screen'),
+            game: document.getElementById('game-screen'),
+            results: document.getElementById('results-screen'),
+        };
+        const nameInput = document.getElementById('name');
+        const ageInput = document.getElementById('age');
+        const startSetupBtn = document.getElementById('start-setup-btn');
+        const startGametBtn = document.getElementById('start-game-btn');
+        const stopGameBtn = document.getElementById('stop-game-btn');
+        const submitAnswerBtn = document.getElementById('submit-answer-btn');
+        const playAgainBtn = document.getElementById('play-again-btn');
+        const answerInput = document.getElementById('answer');
+        const keypad = document.getElementById('keypad');
+        const backspaceBtn = document.getElementById('backspace-btn');
+        
+        // Game State
+        let gameState = {};
+
+        function resetGameState() {
+            gameState = {
+                name: '',
+                age: 0,
+                difficulty: 1,
+                operators: [],
+                score: 0,
+                totalQuestionsAnswered: 0,
+                totalCorrectAnswers: 0,
+                totalAnswerTime: 0, // in seconds
+                questionStartTime: 0,
+                questionTimer: 0,
+                questionTimerInterval: null,
+            };
+        }
+        
+        // --- Navigation ---
+        function showScreen(screenName) {
+            Object.values(screens).forEach(screen => screen.classList.remove('active'));
+            screens[screenName].classList.add('active');
+        }
+
+        startSetupBtn.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            const age = parseInt(ageInput.value);
+
+            if (!name || !age) {
+                alert('🌟 Please enter your awesome name and age so we can start the adventure! 🚀');
+                return;
+            }
+
+            resetGameState();
+            gameState.name = name;
+            gameState.age = age;
+
+            // Set initial difficulty based on age - start easier for younger kids
+            if (age <= 6) {
+                gameState.difficulty = 1; // Very simple single digits
+            } else if (age <= 9) {
+                gameState.difficulty = 2; // Slightly larger numbers
+            } else if (age <= 12) {
+                gameState.difficulty = 4; // More challenging
+            } else {
+                gameState.difficulty = 6; // Advanced level
+            }
+
+            showScreen('setup');
+        });
+
+        startGametBtn.addEventListener('click', () => {
+            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            gameState.operators = Array.from(checkedBoxes).map(box => box.value);
+
+            if (gameState.operators.length === 0) {
+                alert('🎯 Please choose at least one math power to practice! Pick your favorites! ⚡');
+                return;
+            }
+            startContinuousGame();
+        });
+
+        // Confetti function for celebrations
+        function createConfetti() {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.className = 'confetti';
+            confettiContainer.style.left = Math.random() * 100 + '%';
+            document.body.appendChild(confettiContainer);
+
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
+
+            for (let i = 0; i < 10; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.left = Math.random() * 100 + 'px';
+                piece.style.animationDelay = Math.random() * 3 + 's';
+                piece.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                confettiContainer.appendChild(piece);
+            }
+
+            setTimeout(() => {
+                document.body.removeChild(confettiContainer);
+            }, 5000);
+        }
+        
+        stopGameBtn.addEventListener('click', () => {
+             clearInterval(gameState.questionTimerInterval);
+             calculateAndShowFinalResults();
+        });
+
+        playAgainBtn.addEventListener('click', () => {
+            // Go back to setup screen, keeping name and age
+            showScreen('setup');
+        });
+        
+        // --- Input Handling ---
+        answerInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                submitAnswerBtn.click();
+            }
+        });
+
+        keypad.addEventListener('click', (event) => {
+            const key = event.target.dataset.key;
+            if (!key) return; // Exit if they clicked the gap between buttons
+
+            if (key >= '0' && key <= '9') {
+                answerInput.value += key;
+            }
+            answerInput.focus();
+        });
+
+        // Backspace button functionality
+        backspaceBtn.addEventListener('click', () => {
+            const currentValue = answerInput.value;
+            answerInput.value = currentValue.slice(0, -1);
+            answerInput.focus();
+        });
+
+        // --- Game Logic ---
+        function startContinuousGame() {
+            // Reset stats for a new session
+            gameState.score = 0;
+            gameState.totalQuestionsAnswered = 0;
+            gameState.totalCorrectAnswers = 0;
+            gameState.totalAnswerTime = 0;
+            
+            showScreen('game');
+            generateAndDisplayQuestion();
+        }
+        
+        function updateDifficultyDisplay() {
+            let difficultyText = '🌱 Learning';
+
+            // Age-appropriate difficulty labels
+            if (gameState.age <= 6) {
+                if (gameState.difficulty <= 2) difficultyText = '🌱 Learning';
+                else if (gameState.difficulty <= 4) difficultyText = '⭐ Growing';
+                else if (gameState.difficulty <= 7) difficultyText = '🚀 Amazing';
+                else if (gameState.difficulty <= 10) difficultyText = '🔥 Superstar';
+                else difficultyText = '🧠 Genius Kid';
+            } else if (gameState.age <= 9) {
+                if (gameState.difficulty <= 3) difficultyText = '🌱 Beginner';
+                else if (gameState.difficulty <= 6) difficultyText = '⭐ Good';
+                else if (gameState.difficulty <= 9) difficultyText = '🚀 Great';
+                else if (gameState.difficulty <= 12) difficultyText = '🔥 Excellent';
+                else difficultyText = '🧠 Math Wizard';
+            } else {
+                if (gameState.difficulty <= 4) difficultyText = '🌱 Starter';
+                else if (gameState.difficulty <= 7) difficultyText = '⭐ Intermediate';
+                else if (gameState.difficulty <= 10) difficultyText = '🚀 Advanced';
+                else if (gameState.difficulty <= 15) difficultyText = '🔥 Expert';
+                else difficultyText = '🧠 Genius';
+            }
+
+            document.getElementById('difficulty-display').innerHTML = `🎯 Level: ${difficultyText}`;
+
+            // Update score display
+            document.getElementById('score-display').innerHTML = `⭐ Score: ${gameState.score}`;
+
+            // Update progress bar based on questions answered
+            const progress = Math.min((gameState.totalQuestionsAnswered * 10), 100);
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        function generateAndDisplayQuestion() {
+            const operator = gameState.operators[Math.floor(Math.random() * gameState.operators.length)];
+            let num1, num2, answer;
+
+            // Age-based initial difficulty with adaptive scaling
+            let baseMaxNum, baseMinNum, multiplicationMax;
+
+            if (gameState.age <= 6) {
+                // Ages 1-6: Start with single digits, scale with difficulty
+                baseMaxNum = Math.min(9, 3 + gameState.difficulty);
+                baseMinNum = 1;
+                multiplicationMax = Math.min(5, 2 + Math.floor(gameState.difficulty / 3));
+            } else if (gameState.age <= 9) {
+                // Ages 7-9: Start with slightly larger numbers
+                baseMaxNum = Math.min(20, 5 + gameState.difficulty * 2);
+                baseMinNum = gameState.difficulty > 3 ? 2 : 1;
+                multiplicationMax = Math.min(10, 3 + Math.floor(gameState.difficulty / 2));
+            } else {
+                // Ages 10+: More challenging from the start
+                baseMaxNum = Math.min(50, 10 + gameState.difficulty * 3);
+                baseMinNum = gameState.difficulty > 2 ? gameState.difficulty : 1;
+                multiplicationMax = Math.min(12, 4 + Math.floor(gameState.difficulty / 2));
+            }
+
+            if (operator === '+') {
+                num1 = Math.floor(Math.random() * baseMaxNum) + baseMinNum;
+                num2 = Math.floor(Math.random() * baseMaxNum) + baseMinNum;
+                answer = num1 + num2;
+
+                // For very young kids, keep sums under 10 initially
+                if (gameState.age <= 6 && gameState.difficulty <= 3 && answer > 10) {
+                    num2 = Math.max(1, 10 - num1);
+                    answer = num1 + num2;
+                }
+            } else if (operator === '-') {
+                // Ensure positive results for younger children
+                const a = Math.floor(Math.random() * baseMaxNum) + baseMinNum;
+                const b = Math.floor(Math.random() * baseMaxNum) + baseMinNum;
+                num1 = Math.max(a, b);
+                num2 = Math.min(a, b);
+                answer = num1 - num2;
+
+                // For very young kids, keep first number small initially
+                if (gameState.age <= 6 && gameState.difficulty <= 3) {
+                    num1 = Math.min(num1, 9);
+                    num2 = Math.min(num2, num1);
+                    answer = num1 - num2;
+                }
+            } else if (operator === '*') {
+                num1 = Math.floor(Math.random() * multiplicationMax) + 1;
+                num2 = Math.floor(Math.random() * multiplicationMax) + 1;
+                answer = num1 * num2;
+
+                // For young kids, start with very simple multiplication
+                if (gameState.age <= 6 && gameState.difficulty <= 5) {
+                    num1 = Math.min(num1, 3);
+                    num2 = Math.min(num2, 3);
+                    answer = num1 * num2;
+                }
+            } else if (operator === '/') {
+                // Division: ensure whole number results
+                const divisor = Math.floor(Math.random() * multiplicationMax) + 1;
+                answer = Math.floor(Math.random() * multiplicationMax) + 1;
+                num1 = divisor * answer;
+                num2 = divisor;
+
+                // For young kids, keep division very simple
+                if (gameState.age <= 6 && gameState.difficulty <= 5) {
+                    answer = Math.min(answer, 5);
+                    num2 = Math.min(num2, 3);
+                    num1 = num2 * answer;
+                }
+            }
+
+            gameState.currentQuestion = { num1, num2, operator, answer };
+
+            document.getElementById('num1').innerText = num1;
+            document.getElementById('operator').innerText = operator === '*' ? '×' : operator === '/' ? '÷' : operator;
+            document.getElementById('num2').innerText = num2;
+            answerInput.value = '';
+            answerInput.focus();
+
+            updateDifficultyDisplay();
+
+            // Start the visual timer for this question
+            gameState.questionStartTime = Date.now();
+            gameState.questionTimer = 0;
+            const timerDisplay = document.getElementById('question-timer-display');
+            timerDisplay.innerText = `⏱️ Time: 0.0s`;
+
+            clearInterval(gameState.questionTimerInterval); // Clear previous timer
+            gameState.questionTimerInterval = setInterval(() => {
+                gameState.questionTimer += 0.1;
+                timerDisplay.innerText = `⏱️ Time: ${gameState.questionTimer.toFixed(1)}s`;
+            }, 100);
+        }
+
+        submitAnswerBtn.addEventListener('click', () => {
+            if (answerInput.value === '') return;
+
+            clearInterval(gameState.questionTimerInterval); // Stop the question timer
+
+            const answerTime = (Date.now() - gameState.questionStartTime) / 1000; // in seconds
+            gameState.totalAnswerTime += answerTime;
+            gameState.totalQuestionsAnswered++;
+
+            const userAnswer = parseInt(answerInput.value);
+            const correctAnswer = gameState.currentQuestion.answer;
+            const feedbackEl = document.getElementById('feedback');
+            const questionContainer = document.getElementById('question-container');
+            const starsDisplay = document.getElementById('stars-display');
+
+            feedbackEl.classList.remove('correct-animation', 'incorrect-animation', 'text-green-500', 'text-red-500');
+            questionContainer.classList.remove('correct-animation', 'incorrect-animation');
+
+            if (userAnswer === correctAnswer) {
+                gameState.totalCorrectAnswers++;
+                gameState.score += gameState.difficulty * 10;
+
+                // Fun encouraging messages
+                const correctMessages = [
+                    "🌟 Fantastic! You're amazing!",
+                    "🎉 Brilliant work, math star!",
+                    "⚡ Super smart! Keep going!",
+                    "🚀 Outstanding! You rock!",
+                    "✨ Perfect! You're on fire!",
+                    "🎯 Excellent! Math genius!",
+                    "🏆 Incredible! Well done!",
+                    "💫 Awesome! You got it!"
+                ];
+
+                feedbackEl.innerText = correctMessages[Math.floor(Math.random() * correctMessages.length)];
+                feedbackEl.classList.add('text-green-500');
+                questionContainer.classList.add('correct-animation');
+
+                // Add stars based on speed
+                let stars = "⭐";
+                if (answerTime < 3) stars = "⭐⭐⭐";
+                else if (answerTime < 5) stars = "⭐⭐";
+                starsDisplay.innerText = stars;
+
+                // Create confetti for great answers
+                if (answerTime < 4 || gameState.totalCorrectAnswers % 5 === 0) {
+                    createConfetti();
+                }
+
+                // Adaptive difficulty: increase if correct and fast
+                if (answerTime < 3) {
+                    gameState.difficulty++;
+                } else if (answerTime < 5) {
+                    // Stays the same
+                } else {
+                    // Decrease difficulty if correct but slow
+                    if (gameState.difficulty > 1) gameState.difficulty--;
+                }
+
+            } else {
+                const encouragingMessages = [
+                    `🤔 Close! The answer was ${correctAnswer}. You'll get the next one!`,
+                    `💪 Good try! It was ${correctAnswer}. Keep going, you're learning!`,
+                    `🌟 Almost! The answer was ${correctAnswer}. You're getting better!`,
+                    `🚀 Nice effort! It was ${correctAnswer}. Practice makes perfect!`,
+                    `✨ Good thinking! The answer was ${correctAnswer}. Try again!`
+                ];
+
+                feedbackEl.innerText = encouragingMessages[Math.floor(Math.random() * encouragingMessages.length)];
+                feedbackEl.classList.add('text-orange-500');
+                questionContainer.classList.add('incorrect-animation');
+                starsDisplay.innerText = "💪";
+
+                // Adaptive difficulty: decrease if incorrect
+                if (gameState.difficulty > 1) gameState.difficulty--;
+            }
+
+            // Move to next question after a short delay
+            setTimeout(() => {
+                feedbackEl.innerText = "";
+                starsDisplay.innerText = "";
+                questionContainer.classList.remove('correct-animation', 'incorrect-animation');
+                generateAndDisplayQuestion();
+            }, 1500);
+        });
+        
+        function calculateAndShowFinalResults() {
+            clearInterval(gameState.questionTimerInterval);
+            if(gameState.totalQuestionsAnswered === 0) {
+                 // Handle case where user stops without answering
+                 showScreen('setup');
+                 return;
+            }
+
+            // --- Math Power Level Calculation ---
+            // A fun, gamified calculation to celebrate learning!
+            let mathPower = 100;
+
+            // 1. Adjust for Difficulty Reached
+            mathPower += (gameState.difficulty - 5) * 4;
+
+            // 2. Adjust for Accuracy
+            const accuracy = (gameState.totalCorrectAnswers / gameState.totalQuestionsAnswered) * 100;
+            mathPower += (accuracy - 85) * 1.2;
+
+            // 3. Adjust for Speed
+            const averageTime = gameState.totalAnswerTime / gameState.totalQuestionsAnswered;
+            mathPower += (5 - averageTime) * 5;
+
+            // Normalize score to be within a reasonable range
+            mathPower = Math.max(70, Math.min(170, Math.round(mathPower)));
+
+            // Determine achievement badge and message
+            let badge = "🌟";
+            let achievementText = "Great job practicing!";
+
+            if (mathPower >= 150) {
+                badge = "🧠👑";
+                achievementText = "Math Genius! Incredible!";
+            } else if (mathPower >= 130) {
+                badge = "🚀⭐";
+                achievementText = "Math Superstar! Amazing!";
+            } else if (mathPower >= 110) {
+                badge = "🎯🌟";
+                achievementText = "Math Champion! Excellent!";
+            } else if (mathPower >= 90) {
+                badge = "💪⚡";
+                achievementText = "Math Hero! Well done!";
+            } else {
+                badge = "🌱💫";
+                achievementText = "Math Explorer! Keep going!";
+            }
+
+            // Update display elements
+            document.getElementById('results-name-display').innerHTML = `🎉 Fantastic work, ${gameState.name}! 🌟`;
+            document.getElementById('final-score').innerText = gameState.score.toLocaleString();
+            document.getElementById('iq-level-display').innerText = mathPower;
+            document.getElementById('achievement-badge').innerText = badge;
+            document.getElementById('achievement-text').innerText = achievementText;
+
+            // Update stats
+            document.getElementById('correct-count').innerText = gameState.totalCorrectAnswers;
+            document.getElementById('avg-time').innerText = (gameState.totalAnswerTime / gameState.totalQuestionsAnswered).toFixed(1) + 's';
+
+            // Celebration confetti for good performance
+            if (mathPower >= 110 || accuracy >= 80) {
+                setTimeout(createConfetti, 500);
+                setTimeout(createConfetti, 1000);
+            }
+
+            showScreen('results');
+        }
+
+        // Initial setup
+        resetGameState();
+        showScreen('welcome');
+    </script>
+</body>
+</html>
