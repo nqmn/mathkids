@@ -869,51 +869,46 @@
         
         function calculateAndShowFinalResults() {
             clearInterval(gameState.questionTimerInterval);
-            if(gameState.totalQuestionsAnswered === 0) {
-                 // Handle case where user stops without answering
-                 showScreen('setup');
-                 return;
+            if (gameState.totalQuestionsAnswered === 0) {
+                showScreen('setup');
+                return;
             }
 
+            // --- Revised Math Power Level Calculation ---
+            const accuracy = (gameState.totalCorrectAnswers / gameState.totalQuestionsAnswered) * 100;
+            const averageTime = gameState.totalAnswerTime / gameState.totalQuestionsAnswered;
 
-            // --- Math Power Level Calculation ---
-            // A fun, gamified calculation to celebrate learning!
-            let mathPower = 0;
-            let accuracy = 0;
-            
-            // If score is 0, keep mathPower at 0
-            if (gameState.score > 0) {
-                mathPower = 0;
+            // 1. Base score from difficulty
+            let mathPower = gameState.difficulty * 8;
 
-                // 1. Adjust for Difficulty Reached
-                mathPower += (gameState.difficulty - 5) * 4;
+            // 2. Bonus for accuracy
+            mathPower += accuracy * 0.5;
 
-                // 2. Adjust for Accuracy
-                accuracy = (gameState.totalCorrectAnswers / gameState.totalQuestionsAnswered) * 100;
-                mathPower += (accuracy - 85) * 1.2;
-
-                // 3. Adjust for Speed
-                const averageTime = gameState.totalAnswerTime / gameState.totalQuestionsAnswered;
-                mathPower += (5 - averageTime) * 5;
-
-                // Normalize score to be within a reasonable range
-                mathPower = Math.max(70, Math.min(170, Math.round(mathPower)));
+            // 3. Bonus for speed (more points for faster answers)
+            if (averageTime < 5) {
+                mathPower += (5 - averageTime) * 3;
             }
+
+            // 4. Add score as a bonus
+            mathPower += gameState.score / 50;
+
+            // Normalize to a fun range (e.g., 70-200)
+            mathPower = Math.round(Math.max(70, Math.min(200, mathPower)));
 
             // Determine achievement badge and message
             let badge = "🌟";
             let achievementText = "Great job practicing!";
 
-            if (mathPower >= 169) {
+            if (mathPower >= 180) {
                 badge = "🧠👑";
                 achievementText = "Math Genius! Incredible!";
-            } else if (mathPower >= 149) {
+            } else if (mathPower >= 160) {
                 badge = "🚀⭐";
                 achievementText = "Math Superstar! Amazing!";
-            } else if (mathPower >= 129) {
+            } else if (mathPower >= 140) {
                 badge = "🎯🌟";
                 achievementText = "Math Champion! Excellent!";
-            } else if (mathPower >= 100) {
+            } else if (mathPower >= 110) {
                 badge = "💪⚡";
                 achievementText = "Math Hero! Well done!";
             } else {
@@ -929,17 +924,15 @@
             document.getElementById('achievement-text').innerText = achievementText;
 
             // Update stats
-            document.getElementById('correct-count').innerText = gameState.totalCorrectAnswers;
-            document.getElementById('avg-time').innerText = (gameState.totalAnswerTime / gameState.totalQuestionsAnswered).toFixed(1) + 's';
-            // Show difficulty level or '❓ Unknown' if score is 0
-            document.getElementById('difficulty-level').innerText = 
-                gameState.score > 0 ? getDifficultyText(gameState.difficulty) : '❓ Unknown';
+            document.getElementById('correct-count').innerText = `${gameState.totalCorrectAnswers}/${gameState.totalQuestionsAnswered}`;
+            document.getElementById('avg-time').innerText = averageTime.toFixed(1) + 's';
+            document.getElementById('difficulty-level').innerText = getDifficultyText(gameState.difficulty);
 
             // Play end sound
             document.getElementById('endSound').play().catch(e => console.log('Could not play end sound:', e));
 
             // Celebration confetti for good performance
-            if (mathPower >= 110 || accuracy >= 80) {
+            if (mathPower >= 120 || accuracy >= 80) {
                 setTimeout(createConfetti, 500);
                 setTimeout(createConfetti, 1000);
             }
