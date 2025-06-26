@@ -330,7 +330,7 @@
                     <span id="difficulty-display" class="fredoka text-base text-purple-600">
                         🎯 <span>Level:</span> Easy
                     </span>
-                    <button id="stop-game-btn" class="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white fredoka text-sm px-3 py-1 rounded-lg shadow transition-all duration-300">
+                    <button id="stop-game-btn" class="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 active:scale-95 text-white fredoka text-sm px-3 py-1 rounded-lg shadow transition-all duration-300" onclick="document.getElementById('stop-game-btn').classList.add('scale-95'); setTimeout(() => document.getElementById('stop-game-btn').classList.remove('scale-95'), 100)">
                         🛑 <span>Finish</span>
                     </button>
                 </div>
@@ -434,7 +434,12 @@
 
                 <div id="stats-display" class="bg-white rounded-xl p-4 shadow-md">
                     <h3 class="fredoka text-xl text-gray-700 mb-3">📊 Your Stats:</h3>
-                    <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="grid grid-cols-3 gap-4 text-sm">
+                        <div class="text-center">
+                            <div class="text-2xl">🏆</div>
+                            <div class="font-bold" id="difficulty-level">-</div>
+                            <div class="text-gray-600">Level</div>
+                        </div>
                         <div class="text-center">
                             <div class="text-2xl">✅</div>
                             <div class="font-bold" id="correct-count">0</div>
@@ -581,16 +586,6 @@
             }, 5000);
         }
         
-        stopGameBtn.addEventListener('click', () => {
-             clearInterval(gameState.questionTimerInterval);
-             calculateAndShowFinalResults();
-        });
-
-        playAgainBtn.addEventListener('click', () => {
-            // Go back to setup screen, keeping name and age
-            showScreen('setup');
-        });
-        
         // --- Input Handling ---
         answerInput.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
@@ -637,24 +632,25 @@
             generateAndDisplayQuestion();
         }
         
-        function updateDifficultyDisplay() {
-            let difficultyText = '🌱 Learning';
-
+        function getDifficultyText(difficulty) {
             // Unified difficulty levels for all ages
-            if (gameState.difficulty <= 3) {
-                difficultyText = '🌱 Beginner';
-            } else if (gameState.difficulty <= 6) {
-                difficultyText = '⭐ Novice';
-            } else if (gameState.difficulty <= 9) {
-                difficultyText = '🚀 Advanced';
-            } else if (gameState.difficulty <= 12) {
-                difficultyText = '🔥 Expert';
-            } else if (gameState.difficulty <= 15) {
-                difficultyText = '🎯 Master';
+            if (difficulty <= 3) {
+                return '🌱 Beginner';
+            } else if (difficulty <= 6) {
+                return '⭐ Novice';
+            } else if (difficulty <= 9) {
+                return '🚀 Advanced';
+            } else if (difficulty <= 12) {
+                return '🔥 Expert';
+            } else if (difficulty <= 15) {
+                return '🎯 Master';
             } else {
-                difficultyText = '🧠 Grand Master';
+                return '🧠 Grand Master';
             }
+        }
 
+        function updateDifficultyDisplay() {
+            const difficultyText = getDifficultyText(gameState.difficulty);
             document.getElementById('difficulty-display').innerHTML = `🎯 Level: ${difficultyText}`;
 
             // Update score display
@@ -879,38 +875,45 @@
                  return;
             }
 
+
             // --- Math Power Level Calculation ---
             // A fun, gamified calculation to celebrate learning!
-            let mathPower = 100;
+            let mathPower = 0;
+            let accuracy = 0;
+            
+            // If score is 0, keep mathPower at 0
+            if (gameState.score > 0) {
+                mathPower = 0;
 
-            // 1. Adjust for Difficulty Reached
-            mathPower += (gameState.difficulty - 5) * 4;
+                // 1. Adjust for Difficulty Reached
+                mathPower += (gameState.difficulty - 5) * 4;
 
-            // 2. Adjust for Accuracy
-            const accuracy = (gameState.totalCorrectAnswers / gameState.totalQuestionsAnswered) * 100;
-            mathPower += (accuracy - 85) * 1.2;
+                // 2. Adjust for Accuracy
+                accuracy = (gameState.totalCorrectAnswers / gameState.totalQuestionsAnswered) * 100;
+                mathPower += (accuracy - 85) * 1.2;
 
-            // 3. Adjust for Speed
-            const averageTime = gameState.totalAnswerTime / gameState.totalQuestionsAnswered;
-            mathPower += (5 - averageTime) * 5;
+                // 3. Adjust for Speed
+                const averageTime = gameState.totalAnswerTime / gameState.totalQuestionsAnswered;
+                mathPower += (5 - averageTime) * 5;
 
-            // Normalize score to be within a reasonable range
-            mathPower = Math.max(70, Math.min(170, Math.round(mathPower)));
+                // Normalize score to be within a reasonable range
+                mathPower = Math.max(70, Math.min(170, Math.round(mathPower)));
+            }
 
             // Determine achievement badge and message
             let badge = "🌟";
             let achievementText = "Great job practicing!";
 
-            if (mathPower >= 150) {
+            if (mathPower >= 169) {
                 badge = "🧠👑";
                 achievementText = "Math Genius! Incredible!";
-            } else if (mathPower >= 130) {
+            } else if (mathPower >= 149) {
                 badge = "🚀⭐";
                 achievementText = "Math Superstar! Amazing!";
-            } else if (mathPower >= 110) {
+            } else if (mathPower >= 129) {
                 badge = "🎯🌟";
                 achievementText = "Math Champion! Excellent!";
-            } else if (mathPower >= 90) {
+            } else if (mathPower >= 100) {
                 badge = "💪⚡";
                 achievementText = "Math Hero! Well done!";
             } else {
@@ -928,6 +931,9 @@
             // Update stats
             document.getElementById('correct-count').innerText = gameState.totalCorrectAnswers;
             document.getElementById('avg-time').innerText = (gameState.totalAnswerTime / gameState.totalQuestionsAnswered).toFixed(1) + 's';
+            // Show difficulty level or '❓ Unknown' if score is 0
+            document.getElementById('difficulty-level').innerText = 
+                gameState.score > 0 ? getDifficultyText(gameState.difficulty) : '❓ Unknown';
 
             // Play end sound
             document.getElementById('endSound').play().catch(e => console.log('Could not play end sound:', e));
@@ -941,16 +947,31 @@
             showScreen('results');
         }
 
+        // Stop game button functionality
+        console.log('Adding click event listener to stopGameBtn');
+        stopGameBtn.addEventListener('click', () => {
+            console.log('Finish button clicked');
+            try {
+                clearInterval(gameState.questionTimerInterval);
+                console.log('Timer cleared, calling calculateAndShowFinalResults');
+                calculateAndShowFinalResults();
+            } catch (error) {
+                console.error('Error in stopGameBtn click handler:', error);
+            }
+        });
+
         // WhatsApp share functionality
         document.getElementById('whatsapp-share-btn').addEventListener('click', () => {
             const username = gameState.name || 'Math Whiz';
             const score = document.getElementById('final-score').textContent;
-            const level = document.getElementById('iq-level-display').textContent;
+            const mathPower = document.getElementById('iq-level-display').textContent;
+            const difficulty = gameState.score > 0 ? getDifficultyText(gameState.difficulty) : 'Unknown';
             const correct = document.getElementById('correct-count').textContent;
             const avgTime = document.getElementById('avg-time').textContent;
             
             const text = `🎉 ${username} just scored ${score} in Math Genius! 🧮\n\n` +
-                        `🏆 Difficulty: ${level}\n` +
+                        `💪 Math Power: ${mathPower}\n` +
+                        `🏆 Level: ${difficulty}\n` +
                         `✅ Correct Answers: ${correct}\n` +
                         `⏱️ Average Time: ${avgTime}\n\n` +
                         `Can you beat my score? Try it now @ https://mathkidz.vercel.app`;
@@ -971,6 +992,17 @@
             document.removeEventListener('keydown', playWelcomeSound);
         };
         
+        // Play Again button functionality
+        playAgainBtn.addEventListener('click', () => {
+            // Don't reset game state completely to keep name and age
+            gameState.score = 0;
+            gameState.difficulty = 5;
+            gameState.totalCorrectAnswers = 0;
+            gameState.totalQuestionsAnswered = 0;
+            gameState.totalAnswerTime = 0;
+            showScreen('setup');
+        });
+
         // Add event listeners for first interaction
         document.addEventListener('click', playWelcomeSound, { once: true });
         document.addEventListener('keydown', playWelcomeSound, { once: true });
