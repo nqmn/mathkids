@@ -71,27 +71,6 @@ Specifically, here's how the number ranges adjust for each operation:
   - **Expert (difficulty 10-12):** Even larger numbers, up to 2-digit quotients (e.g., 250 / 10, 400 / 20).
   - **Master (difficulty 13+):** 3-digit dividends, 2-digit quotients (e.g., 800 / 25, 1200 / 40).
 
-- **Subtraction** ➖:
-  - **Beginner (difficulty <= 3):** Numbers up to 10, ensuring positive results (e.g., 8 - 3).
-  - **Novice (difficulty 4-6):** Numbers up to 20, ensuring positive results (e.g., 15 - 7).
-  - **Advanced (difficulty 7-9):** Numbers up to 999, ensuring positive results with a minimum difference of 50 (e.g., 500 - 150).
-  - **Expert (difficulty 10-12):** Numbers up to 999, ensuring positive results with a minimum difference of 100 (e.g., 750 - 200).
-  - **Master (difficulty 13+):** Numbers up to 9999, ensuring positive results with a minimum difference of 500 (e.g., 5000 - 1000).
-
-- **Multiplication** ✖️:
-  - **Beginner (difficulty <= 3):** Factors up to 3x3 (e.g., 2 x 3).
-  - **Novice (difficulty 4-6):** Factors up to 5x5 (e.g., 4 x 5).
-  - **Advanced (difficulty 7-9):** Factors up to 12x12, with some larger numbers (e.g., 12 x 7, 15 x 5).
-  - **Expert (difficulty 10-12):** Factors up to 20x20, with some larger numbers (e.g., 18 x 15, 25 x 10).
-  - **Master (difficulty 13+):** Factors up to 30x30, with some larger numbers (e.g., 25 x 30, 40 x 50).
-
-- **Division** ➗:
-  - **Beginner (difficulty <= 3):** Simple division facts with quotients up to 4 (e.g., 10 / 2).
-  - **Novice (difficulty 4-6):** Division facts with quotients up to 6 (e.g., 24 / 4).
-  - **Advanced (difficulty 7-9):** Larger divisors and quotients, up to 19 (e.g., 100 / 5, 150 / 10).
-  - **Expert (difficulty 10-12):** Even larger numbers, up to 2-digit quotients (e.g., 250 / 10, 400 / 20).
-  - **Master (difficulty 13+):** 3-digit dividends, 2-digit quotients (e.g., 800 / 25, 1200 / 40).
-
 ### ⭐ Score Calculation
 
 Your in-game score reflects your progress and accuracy during a session:
