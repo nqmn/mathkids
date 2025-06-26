@@ -451,6 +451,10 @@
                             <div class="text-gray-600">Avg Time</div>
                         </div>
                     </div>
+                    <div id="operations-display" class="mt-4 text-center">
+                        <h4 class="font-bold text-gray-700">Operations:</h4>
+                        <div id="operations-list" class="flex justify-center gap-2 mt-1"></div>
+                    </div>
                 </div>
             </div>
 
@@ -874,26 +878,34 @@
                 return;
             }
 
-            // --- Revised Math Power Level Calculation ---
+            // --- UPGRADED Math Power Level Calculation ---
             const accuracy = (gameState.totalCorrectAnswers / gameState.totalQuestionsAnswered) * 100;
             const averageTime = gameState.totalAnswerTime / gameState.totalQuestionsAnswered;
 
-            // 1. Base score from difficulty
-            let mathPower = gameState.difficulty * 8;
+            // 1. Base score from difficulty (slightly reduced weight to balance with accuracy)
+            let mathPower = gameState.difficulty * 7;
 
-            // 2. Bonus for accuracy
-            mathPower += accuracy * 0.5;
+            // 2. Enhanced bonus for accuracy (more weight for being correct)
+            // Using a power curve to heavily reward high accuracy
+            mathPower += Math.pow(accuracy / 10, 2) * 0.6; // (100% accuracy -> 60 points)
 
-            // 3. Bonus for speed (more points for faster answers)
-            if (averageTime < 5) {
-                mathPower += (5 - averageTime) * 3;
+            // 3. Dynamic and smoother speed bonus
+            // The "expected" time to answer increases with difficulty
+            const dynamicTimeThreshold = 4 + (gameState.difficulty * 0.5); // e.g., Level 2 expects ~5s, Level 10 expects ~9s
+            
+            if (averageTime < dynamicTimeThreshold) {
+                // Bonus is larger the further you are below the threshold
+                const speedBonus = (dynamicTimeThreshold - averageTime) * 2.5;
+                mathPower += Math.max(0, speedBonus); // Ensure bonus is not negative
             }
 
-            // 4. Add score as a bonus
-            mathPower += gameState.score / 50;
+            // 4. Bonus for consistency (e.g., from total score, but capped)
+            mathPower += Math.min(20, gameState.score / 100); // Add up to 20 points from raw score
 
-            // Normalize to a fun range (e.g., 70-200)
-            mathPower = Math.round(Math.max(70, Math.min(200, mathPower)));
+            // 5. Normalize to a fun range (e.g., 50-200)
+            mathPower = Math.round(Math.max(50, Math.min(200, mathPower)));
+
+            // --- End of Upgraded Calculation ---
 
             // Determine achievement badge and message
             let badge = "🌟";
@@ -928,6 +940,16 @@
             document.getElementById('avg-time').innerText = averageTime.toFixed(1) + 's';
             document.getElementById('difficulty-level').innerText = getDifficultyText(gameState.difficulty);
 
+            const operationsList = document.getElementById('operations-list');
+            operationsList.innerHTML = ''; // Clear previous list
+            gameState.operators.forEach(op => {
+                const opMap = { '+': 'Addition', '-': 'Subtraction', '*': 'Multiplication', '/': 'Division' };
+                const opElement = document.createElement('span');
+                opElement.className = 'bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded';
+                opElement.innerText = opMap[op];
+                operationsList.appendChild(opElement);
+            });
+
             // Play end sound
             document.getElementById('endSound').play().catch(e => console.log('Could not play end sound:', e));
 
@@ -961,10 +983,13 @@
             const difficulty = gameState.score > 0 ? getDifficultyText(gameState.difficulty) : 'Unknown';
             const correct = document.getElementById('correct-count').textContent;
             const avgTime = document.getElementById('avg-time').textContent;
+            const opMap = { '+': 'Addition', '-': 'Subtraction', '*': 'Multiplication', '/': 'Division' };
+            const operations = gameState.operators.map(op => opMap[op]).join(', ');
             
             const text = `🎉 ${username} just scored ${score} in Math Genius! 🧮\n\n` +
                         `💪 Math Power: ${mathPower}\n` +
                         `🏆 Level: ${difficulty}\n` +
+                        `🕹️ Operations: ${operations}\n` +
                         `✅ Correct Answers: ${correct}\n` +
                         `⏱️ Average Time: ${avgTime}\n\n` +
                         `Can you beat my score? Try it now @ https://mathkidz.vercel.app`;

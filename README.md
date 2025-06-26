@@ -28,6 +28,41 @@ A fun, interactive math practice game designed specifically for children aged 4-
 - **Offline Ready** - Works without an internet connection once loaded, making it safe and accessible anywhere.
 - **Fast & Lightweight** - Optimized for quick loading and smooth performance.
 
+## 📊 Game Mechanics Explained
+
+### 📈 Adaptive Difficulty
+
+The game's difficulty level (from 1 to 15+) is dynamic and adjusts in real-time based on your performance:
+- **Starting Difficulty:** Determined by the age you enter at the welcome screen.
+- **Increasing Difficulty:** When you answer a question correctly and quickly (under 3 seconds), the difficulty level increases, presenting you with more challenging problems.
+- **Maintaining Difficulty:** If you answer correctly but take a bit longer (3-5 seconds), the difficulty level remains the same.
+- **Decreasing Difficulty:** If you answer incorrectly, or correctly but very slowly (over 5 seconds), the difficulty level decreases (but never below 1), ensuring the game remains challenging but not frustrating.
+
+This adaptive system ensures that the questions are always tailored to your current skill level, providing an optimal learning experience.
+
+### ⭐ Score Calculation
+
+Your in-game score reflects your progress and accuracy during a session:
+- **Points per Question:** For each correct answer, you earn points equal to `current_difficulty_level * 10`.
+- **Higher Difficulty, Higher Reward:** This means that solving problems at higher difficulty levels yields significantly more points, encouraging you to improve and challenge yourself.
+
+### 🧠 Math Power Level Calculation
+
+At the end of each game session, a unique "Math Power Level" (ranging from 50 to 200) is calculated. This level provides a comprehensive assessment of your math skills, taking into account multiple factors:
+
+1.  **Base from Difficulty:** Your final difficulty level reached contributes a significant portion (`final_difficulty_level * 7`).
+2.  **Accuracy Bonus:** Your overall accuracy (percentage of correct answers) is heavily rewarded. Higher accuracy leads to a substantial bonus, with a power curve that gives extra credit for near-perfect performance.
+3.  **Dynamic Speed Bonus:** How quickly you answer questions matters! A bonus is awarded if your average answer time is below a dynamic threshold. This threshold adjusts based on the question's difficulty, meaning you're not penalized for taking slightly longer on harder problems. The faster you are relative to the expected time, the higher this bonus.
+4.  **Consistency Bonus:** A small portion of your total score is added as a bonus, rewarding consistent performance throughout the game.
+
+These factors are combined and then normalized to a fun, easy-to-understand scale from 50 to 200. A higher "Math Power Level" indicates stronger overall math proficiency, combining knowledge, speed, and consistency.
+
+### ⚡ Technical Features
+- **Fully Responsive** - Works seamlessly on desktop, tablet, and mobile devices.
+- **Zero Installation** - A single `index.html` file that runs directly in any modern web browser.
+- **Offline Ready** - Works without an internet connection once loaded, making it safe and accessible anywhere.
+- **Fast & Lightweight** - Optimized for quick loading and smooth performance.
+
 ## 🎯 How to Play
 
 ### 1. Welcome Screen 👋
