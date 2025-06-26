@@ -669,8 +669,7 @@
             const operator = gameState.operators[Math.floor(Math.random() * gameState.operators.length)];
             let num1, num2, answer;
 
-            // Unified difficulty scaling for all ages
-            let baseMaxNum, baseMinNum, multiplicationMax;
+            
             
             // Scale number ranges based on difficulty level (1-20+)
             if (gameState.difficulty <= 3) {
@@ -701,59 +700,105 @@
             }
 
             if (operator === '+') {
-                num1 = Math.floor(Math.random() * baseMaxNum) + baseMinNum;
-                num2 = Math.floor(Math.random() * baseMaxNum) + baseMinNum;
-                answer = num1 + num2;
-
-                // For very young kids, keep sums under 10 initially
-                if (gameState.age <= 6 && gameState.difficulty <= 3 && answer > 10) {
-                    num2 = Math.max(1, 10 - num1);
-                    answer = num1 + num2;
-                }
-            } else if (operator === '-') {
-                // Ensure positive results for younger children
-                const a = Math.floor(Math.random() * baseMaxNum) + baseMinNum;
-                const b = Math.floor(Math.random() * baseMaxNum) + baseMinNum;
-                num1 = Math.max(a, b);
-                num2 = Math.min(a, b);
-                answer = num1 - num2;
-
-                // For very young kids, keep first number small initially
-                if (gameState.age <= 6 && gameState.difficulty <= 3) {
-                    num1 = Math.min(num1, 9);
-                    num2 = Math.min(num2, num1);
-                    answer = num1 - num2;
-                }
-            } else if (operator === '*') {
-                const maxFactor = Math.min(multiplicationMax, Math.ceil(Math.sqrt(baseMaxNum)));
-                
-                if (gameState.difficulty <= 5) {
-                    // Simple multiplication tables at lower levels
-                    num1 = Math.floor(Math.random() * (maxFactor - 1)) + 2;
-                    num2 = Math.floor(Math.random() * (maxFactor - 1)) + 2;
-                } else if (gameState.difficulty <= 10) {
-                    // Larger numbers, but one factor is still small
-                    num1 = Math.floor(Math.random() * (maxFactor * 2 - 1)) + 2;
-                    num2 = Math.floor(Math.random() * (maxFactor - 1)) + 2;
+                // Addition: scale numbers based on difficulty
+                if (gameState.difficulty <= 3) {
+                    // Beginner: sums up to 10
+                    num1 = Math.floor(Math.random() * 9) + 1; // 1-9
+                    num2 = Math.floor(Math.random() * (10 - num1)) + 1; // Ensure sum <= 10
+                } else if (gameState.difficulty <= 6) {
+                    // Novice: sums up to 100 (2-digit numbers)
+                    num1 = Math.floor(Math.random() * 90) + 10; // 10-99
+                    num2 = Math.floor(Math.random() * 90) + 10; // 10-99
+                } else if (gameState.difficulty <= 9) {
+                    // Advanced: sums up to 1000 (3-digit numbers)
+                    num1 = Math.floor(Math.random() * 900) + 100; // 100-999
+                    num2 = Math.floor(Math.random() * 900) + 100; // 100-999
+                } else if (gameState.difficulty <= 12) {
+                    // Expert: sums up to 5000 (3-4 digit numbers)
+                    num1 = Math.floor(Math.random() * 4000) + 100; // 100-4099
+                    num2 = Math.floor(Math.random() * 4000) + 100; // 100-4099
                 } else {
-                    // Full range multiplication at higher levels
-                    num1 = Math.floor(Math.random() * (maxFactor - 1)) + 2;
-                    num2 = Math.floor(Math.random() * (maxFactor - 1)) + 2;
+                    // Master: sums up to 10000+ (4-digit numbers)
+                    num1 = Math.floor(Math.random() * 9000) + 1000; // 1000-9999
+                    num2 = Math.floor(Math.random() * 9000) + 1000; // 1000-9999
+                }
+                answer = num1 + num2;
+            } else if (operator === '-') {
+                // Subtraction: Ensure positive results and scale difficulty
+                if (gameState.difficulty <= 3) {
+                    // Beginner: small numbers, result > 0, ensuring num1 > num2
+                    num1 = Math.floor(Math.random() * 6) + 5; // 5-10
+                    num2 = Math.floor(Math.random() * (num1 - 1)) + 1; // 1 to num1-1
+                } else if (gameState.difficulty <= 6) {
+                    // Novice: up to 2-digit numbers, ensuring num1 > num2
+                    num1 = Math.floor(Math.random() * 11) + 10; // 10-20
+                    num2 = Math.floor(Math.random() * (num1 - 1)) + 1; // 1 to num1-1
+                } else if (gameState.difficulty <= 9) {
+                    // Advanced: up to 3-digit numbers
+                    num1 = Math.floor(Math.random() * 900) + 100; // 100-999
+                    num2 = Math.floor(Math.random() * (num1 - 50)) + 1; // Ensure num1 > num2 by at least 50
+                } else if (gameState.difficulty <= 12) {
+                    // Expert: larger 3-digit numbers
+                    num1 = Math.floor(Math.random() * 900) + 100; // 100-999
+                    num2 = Math.floor(Math.random() * (num1 - 100)) + 1; // Ensure num1 > num2 by at least 100
+                } else {
+                    // Master: 4-digit numbers
+                    num1 = Math.floor(Math.random() * 9000) + 1000; // 1000-9999
+                    num2 = Math.floor(Math.random() * (num1 - 500)) + 1; // Ensure num1 > num2 by at least 500
+                }
+                answer = num1 - num2;
+            } else if (operator === '*') {
+                // Adjust multiplication factors based on difficulty
+                if (gameState.difficulty <= 3) {
+                    // Beginner: 1-digit numbers (up to 3x3)
+                    num1 = Math.floor(Math.random() * 2) + 2; // 2-3
+                    num2 = Math.floor(Math.random() * 2) + 2; // 2-3
+                } else if (gameState.difficulty <= 6) {
+                    // Novice: up to 5x5
+                    num1 = Math.floor(Math.random() * 4) + 2; // 2-5
+                    num2 = Math.floor(Math.random() * 4) + 2; // 2-5
+                } else if (gameState.difficulty <= 9) {
+                    // Advanced: up to 12x12, and some larger numbers
+                    num1 = Math.floor(Math.random() * 11) + 2; // 2-12
+                    num2 = Math.floor(Math.random() * 11) + 2; // 2-12
+                    if (Math.random() > 0.5) num1 = Math.floor(Math.random() * 20) + 10; // 10-29
+                } else if (gameState.difficulty <= 12) {
+                    // Expert: larger numbers, up to 20x20
+                    num1 = Math.floor(Math.random() * 19) + 2; // 2-20
+                    num2 = Math.floor(Math.random() * 19) + 2; // 2-20
+                    if (Math.random() > 0.3) num1 = Math.floor(Math.random() * 30) + 15; // 15-44
+                } else {
+                    // Master: even larger numbers
+                    num1 = Math.floor(Math.random() * 25) + 5; // 5-30
+                    num2 = Math.floor(Math.random() * 25) + 5; // 5-30
+                    if (Math.random() > 0.2) num1 = Math.floor(Math.random() * 50) + 20; // 20-69
+                    if (Math.random() > 0.2) num2 = Math.floor(Math.random() * 50) + 20; // 20-69
                 }
                 answer = num1 * num2;
             } else if (operator === '/') {
-                // Division: ensure whole number results
-                const divisor = Math.floor(Math.random() * multiplicationMax) + 1;
-                answer = Math.floor(Math.random() * multiplicationMax) + 1;
-                num1 = divisor * answer;
-                num2 = divisor;
-
-                // For young kids, start with very simple division
-                if (gameState.age <= 6 && gameState.difficulty <= 5) {
-                    num1 = Math.min(num1, 9);
-                    num2 = Math.min(num2, 3);
-                    answer = num1 / num2;
+                // Division: ensure whole number results and scale difficulty
+                if (gameState.difficulty <= 3) {
+                    // Beginner: simple division facts (e.g., 10/2)
+                    answer = Math.floor(Math.random() * 3) + 2; // 2-4
+                    num2 = Math.floor(Math.random() * 3) + 2; // 2-4
+                } else if (gameState.difficulty <= 6) {
+                    // Novice: up to 10x10 division facts
+                    answer = Math.floor(Math.random() * 5) + 2; // 2-6
+                    num2 = Math.floor(Math.random() * 5) + 2; // 2-6
+                } else if (gameState.difficulty <= 9) {
+                    // Advanced: larger divisors and quotients
+                    answer = Math.floor(Math.random() * 15) + 5; // 5-19
+                    num2 = Math.floor(Math.random() * 10) + 2; // 2-11
+                } else if (gameState.difficulty <= 12) {
+                    // Expert: even larger numbers, up to 2-digit quotients
+                    answer = Math.floor(Math.random() * 20) + 10; // 10-29
+                    num2 = Math.floor(Math.random() * 15) + 5; // 5-19
+                } else {
+                    // Master: 3-digit dividends, 2-digit quotients
+                    answer = Math.floor(Math.random() * 30) + 20; // 20-49
+                    num2 = Math.floor(Math.random() * 20) + 10; // 10-29
                 }
+                num1 = answer * num2;
             }
 
             gameState.currentQuestion = { num1, num2, operator, answer };

@@ -13,7 +13,7 @@ A fun, interactive math practice game designed specifically for children aged 4-
 ### 🧮 Educational Features
 - **Four Math Operations** - Addition ➕, Subtraction ➖, Multiplication ✖️, and Division ➗.
 - **Adaptive Difficulty** - Automatically adjusts question difficulty based on the player's age, speed, and accuracy.
-- **Age-Appropriate Content** - Problems scale to be suitable for children from ages 4 to 12.
+
 - **Progress Tracking** - A visual progress bar shows advancement through a session.
 
 ### 🌟 Motivational Elements
@@ -32,13 +32,13 @@ A fun, interactive math practice game designed specifically for children aged 4-
 
 ### 📈 Adaptive Difficulty
 
-The game's difficulty level (from 1 to 15+) is dynamic and adjusts in real-time based on your performance:
-- **Starting Difficulty:** Determined by the age you enter at the welcome screen.
-- **Increasing Difficulty:** When you answer a question correctly and quickly (under 3 seconds), the difficulty level increases, presenting you with more challenging problems.
+The game's difficulty level (from 1 to 15+) is dynamic and adjusts in real-time based on your performance. While a single difficulty level is maintained, the complexity of numbers generated for each operation (addition, subtraction, multiplication, division) scales specifically and aggressively with this level:
+- **Starting Difficulty:** Determined by the initial setup.
+- **Increasing Difficulty:** When you answer a question correctly and quickly (under 3 seconds), the difficulty level increases, presenting you with more challenging problems across all selected operations.
 - **Maintaining Difficulty:** If you answer correctly but take a bit longer (3-5 seconds), the difficulty level remains the same.
 - **Decreasing Difficulty:** If you answer incorrectly, or correctly but very slowly (over 5 seconds), the difficulty level decreases (but never below 1), ensuring the game remains challenging but not frustrating.
 
-This adaptive system ensures that the questions are always tailored to your current skill level, providing an optimal learning experience.
+This adaptive system ensures that the questions are always tailored to your current skill level, providing an optimal learning experience, with each operation's number range adjusting dynamically.
 
 ### ⭐ Score Calculation
 
@@ -67,7 +67,6 @@ These factors are combined and then normalized to a fun, easy-to-understand scal
 
 ### 1. Welcome Screen 👋
 - Enter your name and age.
-- The game uses this to set an appropriate starting difficulty level.
 
 ### 2. Choose Your Math Powers ⚡
 - Select which math operations you want to practice:
