@@ -523,7 +523,7 @@
             
             // Play appropriate sound based on screen
             if (screenName === 'setup') {
-                document.getElementById('selectSound').play().catch(e => console.log('Could not play select sound:', e));
+                document.getElementById('selectSound').play().catch(e => {});
             }
         }
 
@@ -802,7 +802,7 @@
                 gameState.score += gameState.difficulty * 10;
                 
                 // Play correct answer sound
-                document.getElementById('correctSound').play().catch(e => console.log('Could not play sound:', e));
+                document.getElementById('correctSound').play().catch(e => {});
 
                 // Fun encouraging messages
                 const correctMessages = [
@@ -851,7 +851,7 @@
                 ];
 
                 // Play wrong answer sound
-                document.getElementById('wrongSound').play().catch(e => console.log('Could not play sound:', e));
+                document.getElementById('wrongSound').play().catch(e => {});
                 
                 feedbackEl.innerText = encouragingMessages[Math.floor(Math.random() * encouragingMessages.length)];
                 feedbackEl.className = 'text-orange-500 text-sm sm:text-base md:text-lg transition-all duration-200';
@@ -951,7 +951,7 @@
             });
 
             // Play end sound
-            document.getElementById('endSound').play().catch(e => console.log('Could not play end sound:', e));
+            document.getElementById('endSound').play().catch(e => {});
 
             // Celebration confetti for good performance
             if (mathPower >= 120 || accuracy >= 80) {
@@ -963,12 +963,12 @@
         }
 
         // Stop game button functionality
-        console.log('Adding click event listener to stopGameBtn');
+        
         stopGameBtn.addEventListener('click', () => {
-            console.log('Finish button clicked');
+            
             try {
                 clearInterval(gameState.questionTimerInterval);
-                console.log('Timer cleared, calling calculateAndShowFinalResults');
+                
                 calculateAndShowFinalResults();
             } catch (error) {
                 console.error('Error in stopGameBtn click handler:', error);
@@ -1004,7 +1004,7 @@
         
         // Play welcome sound on first interaction
         const playWelcomeSound = () => {
-            document.getElementById('welcomeSound').play().catch(e => console.log('Could not play welcome sound:', e));
+            document.getElementById('welcomeSound').play().catch(e => {});
             // Remove the event listener after first interaction
             document.removeEventListener('click', playWelcomeSound);
             document.removeEventListener('keydown', playWelcomeSound);
