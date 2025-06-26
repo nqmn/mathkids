@@ -205,19 +205,61 @@
     </style>
 </head>
 <body class="text-gray-800 flex items-center justify-center min-h-screen p-2 sm:p-4">
+    <!-- Audio elements for sound effects -->
+    <audio id="correctSound" src="correct.mp3" preload="auto"></audio>
+    <audio id="wrongSound" src="wrong.mp3" preload="auto"></audio>
+    <audio id="endSound" src="end.mp3" preload="auto"></audio>
+    <audio id="selectSound" src="select.mp3" preload="auto"></audio>
+    <audio id="welcomeSound" src="welcome.mp3" preload="auto"></audio>
 
     <div class="w-full max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 md:p-10 space-y-6 border-4 border-yellow-300">
 
         <!-- Welcome Screen -->
         <div id="welcome-screen" class="screen active text-center">
-            <h1 class="text-4xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 fredoka mb-4">
-                🎯 Math Adventure! 🌟
-            </h1>
-            <p class="text-xl mb-6 text-gray-700">🚀 Let's practice some math and have amazing fun! 🎉</p>
-            <div class="bg-gradient-to-r from-yellow-200 to-pink-200 rounded-2xl p-6 mb-6">
-                <div class="text-6xl mb-4">🧮✨🎈</div>
-                <p class="text-lg font-semibold text-gray-700">Welcome, young mathematician! 🤓</p>
-                <p class="text-sm text-gray-600 mt-2">Get ready for an epic math journey! 🗺️</p>
+            <h1 class="text-4xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 fredoka mb-4">🎯 Math Genius! 🌟</h1>
+            <p class="text-xl mb-6 text-gray-700">🚀 Let's challenge your math skills! 🎉</p>
+            <div class="bg-gradient-to-r from-yellow-100 to-pink-100 rounded-2xl p-6 mb-6 border-2 border-yellow-300">
+                <div class="text-6xl mb-4">🧮✨🎓</div>
+                <p class="text-lg font-semibold text-gray-800">Welcome to Math Genius! 🤓</p>
+                <p class="text-sm text-gray-700 mt-3">
+                    Our smart system adapts to your unique learning style and pace so you'll never boring.
+                </p>
+                
+                <div class="mt-4 p-4 bg-white bg-opacity-50 rounded-xl border-2 border-purple-200 shadow-sm">
+                    <p class="text-sm font-medium text-purple-700 mb-3 flex items-center">
+                        <span class="text-yellow-500 text-lg mr-2">🔍</span> How We Find Your Perfect Level:
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="bg-white p-3 rounded-lg border-l-4 border-blue-400">
+                            <p class="font-semibold text-sm text-blue-700">🎂 Age-based Start</p>
+                            <p class="text-xs text-gray-600">We begin with questions tailored to your age group</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border-l-4 border-green-400">
+                            <p class="font-semibold text-sm text-green-700">⏱️ Response Time</p>
+                            <p class="text-xs text-gray-600">We notice how quickly you solve problems</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border-l-4 border-yellow-400">
+                            <p class="font-semibold text-sm text-yellow-700">✅ Accuracy Tracking</p>
+                            <p class="text-xs text-gray-600">We learn from your correct and incorrect answers</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border-l-4 border-purple-400">
+                            <p class="font-semibold text-sm text-purple-700">📈 Smart Adjustment</p>
+                            <p class="text-xs text-gray-600">We continuously adapt to keep you challenged</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border-l-4 border-brown-400">
+                            <p class="font-semibold text-sm text-brown-700">📡 Real time progress</p>
+                            <p class="text-xs text-gray-600">You can see your progress in real time</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border-l-4 border-red-400">
+                            <p class="font-semibold text-sm text-red-700">⏱️ Finish anytime</p>
+                            <p class="text-xs text-gray-600">You can finish anytime to know your level</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-xs text-center text-gray-500 mt-4 font-medium">
+                    Just enter your name and age below to start your personalized math adventure! 🚀
+                </p>
             </div>
             <div class="space-y-4">
                 <div class="relative">
@@ -230,7 +272,7 @@
                 </div>
             </div>
              <button id="start-setup-btn" class="fun-btn mt-6 w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white fredoka text-2xl py-4 rounded-xl shadow-lg">
-                🚀 Let's Go on an Adventure! 🌟
+                🚀 Let's Go! 🌟
              </button>
         </div>
 
@@ -243,7 +285,7 @@
             <div class="grid grid-cols-2 gap-4 text-center">
                 <div>
                     <input type="checkbox" id="addition" value="+" class="hidden peer">
-                    <label for="addition" class="checkbox-label block p-6 bg-gradient-to-br from-red-400 to-red-600 text-white rounded-2xl cursor-pointer peer-checked:from-red-500 peer-checked:to-red-700 peer-checked:ring-4 ring-red-200 shadow-lg">
+                    <label for="addition" class="checkbox-label block p-6 bg-gradient-to-br from-red-400 to-red-600 text-white rounded-2xl cursor-pointer peer-checked:from-red-500 peer-checked:to-red-700 peer-checked:ring-4 peer-checked:ring-red-400 peer-checked:ring-offset-2 peer-checked:shadow-xl shadow-lg transition-all duration-200">
                         <div class="text-5xl mb-2">➕</div>
                         <div class="fredoka text-xl">Addition</div>
                         <div class="text-sm opacity-90">Add it up! 🔢</div>
@@ -251,7 +293,7 @@
                 </div>
                 <div>
                     <input type="checkbox" id="subtraction" value="-" class="hidden peer">
-                    <label for="subtraction" class="checkbox-label block p-6 bg-gradient-to-br from-yellow-400 to-orange-500 text-white rounded-2xl cursor-pointer peer-checked:from-yellow-500 peer-checked:to-orange-600 peer-checked:ring-4 ring-yellow-200 shadow-lg">
+                    <label for="subtraction" class="checkbox-label block p-6 bg-gradient-to-br from-yellow-400 to-orange-500 text-white rounded-2xl cursor-pointer peer-checked:from-yellow-500 peer-checked:to-orange-600 peer-checked:ring-4 peer-checked:ring-yellow-400 peer-checked:ring-offset-2 peer-checked:shadow-xl shadow-lg transition-all duration-200">
                         <div class="text-5xl mb-2">➖</div>
                         <div class="fredoka text-xl">Subtraction</div>
                         <div class="text-sm opacity-90">Take away! 🎯</div>
@@ -259,7 +301,7 @@
                 </div>
                 <div>
                     <input type="checkbox" id="multiplication" value="*" class="hidden peer">
-                    <label for="multiplication" class="checkbox-label block p-6 bg-gradient-to-br from-purple-400 to-purple-600 text-white rounded-2xl cursor-pointer peer-checked:from-purple-500 peer-checked:to-purple-700 peer-checked:ring-4 ring-purple-200 shadow-lg">
+                    <label for="multiplication" class="checkbox-label block p-6 bg-gradient-to-br from-purple-400 to-purple-600 text-white rounded-2xl cursor-pointer peer-checked:from-purple-500 peer-checked:to-purple-700 peer-checked:ring-4 peer-checked:ring-purple-400 peer-checked:ring-offset-2 peer-checked:shadow-xl shadow-lg transition-all duration-200">
                         <div class="text-5xl mb-2">✖️</div>
                         <div class="fredoka text-xl">Multiplication</div>
                         <div class="text-sm opacity-90">Times tables! 🚀</div>
@@ -267,7 +309,7 @@
                 </div>
                 <div>
                     <input type="checkbox" id="division" value="/" class="hidden peer">
-                    <label for="division" class="checkbox-label block p-6 bg-gradient-to-br from-indigo-400 to-indigo-600 text-white rounded-2xl cursor-pointer peer-checked:from-indigo-500 peer-checked:to-indigo-700 peer-checked:ring-4 ring-indigo-200 shadow-lg">
+                    <label for="division" class="checkbox-label block p-6 bg-gradient-to-br from-indigo-400 to-indigo-600 text-white rounded-2xl cursor-pointer peer-checked:from-indigo-500 peer-checked:to-indigo-700 peer-checked:ring-4 peer-checked:ring-indigo-400 peer-checked:ring-offset-2 peer-checked:shadow-xl shadow-lg transition-all duration-200">
                         <div class="text-5xl mb-2">➗</div>
                         <div class="fredoka text-xl">Division</div>
                         <div class="text-sm opacity-90">Share equally! 🎪</div>
@@ -275,33 +317,37 @@
                 </div>
             </div>
             <button id="start-game-btn" class="fun-btn mt-8 w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white fredoka text-2xl py-4 rounded-xl shadow-lg">
-                🎉 Start the Math Adventure! 🌟
+                🎉 Start the Adventure! 🌟
             </button>
         </div>
 
         <!-- Game Screen -->
         <div id="game-screen" class="screen">
             <!-- Progress and Stats Bar -->
-            <div class="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-4 mb-6">
-                <div class="flex justify-between items-center mb-3">
-                    <div id="difficulty-display" class="fredoka text-lg md:text-xl text-purple-600 flex-1 text-left">
-                        🎯 Level: Easy
-                    </div>
-                    <div id="score-display" class="fredoka text-lg md:text-xl text-green-600 flex-1 text-center">
-                        ⭐ Score: 0
-                    </div>
-                    <div class="flex-1 text-right">
-                        <button id="stop-game-btn" class="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white fredoka px-4 py-2 rounded-xl shadow-lg transition-all duration-300">
-                            🛑 Finish
-                        </button>
-                    </div>
+            <div class="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-3 mb-6 space-y-2">
+                <!-- First Line: Level -->
+                <div class="flex justify-between items-center">
+                    <span id="difficulty-display" class="fredoka text-base text-purple-600">
+                        🎯 <span>Level:</span> Easy
+                    </span>
+                    <button id="stop-game-btn" class="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white fredoka text-sm px-3 py-1 rounded-lg shadow transition-all duration-300">
+                        🛑 <span>Finish</span>
+                    </button>
                 </div>
-                <div id="question-timer-display" class="fredoka text-lg text-orange-600 text-center">
-                    ⏱️ Time: 0.0s
+                
+                <!-- Second Line: Score and Timer -->
+                <div class="flex justify-between items-center">
+                    <span id="score-display" class="fredoka text-base text-green-600">
+                        ⭐ <span>Score:</span> 0
+                    </span>
+                    <span id="question-timer-display" class="fredoka text-base text-orange-600">
+                        ⏱️ <span>Time:</span> 0.0s
+                    </span>
                 </div>
-                <!-- Progress Bar -->
-                <div class="w-full bg-gray-200 rounded-full h-3 mt-3">
-                    <div id="progress-bar" class="progress-bar h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                
+                <!-- Third Line: Progress Bar -->
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div id="progress-bar" class="progress-bar h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
                 </div>
             </div>
 
@@ -320,9 +366,9 @@
             <!-- Answer Input -->
             <div class="relative mt-6">
                 <span class="absolute left-4 top-4 text-3xl">💭</span>
-                <input type="number" id="answer" class="w-full pl-16 pr-16 text-4xl text-center p-4 border-4 border-purple-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-purple-400 focus:border-purple-500 bg-gradient-to-r from-white to-purple-50" placeholder="Your answer...">
-                <button id="backspace-btn" class="absolute right-2 top-2 w-12 h-12 bg-red-500 hover:bg-red-600 text-white rounded-xl text-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg">
-                    ←
+                <input type="number" id="answer" class="w-full pl-16 pr-16 text-4xl text-center p-4 border-4 border-purple-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-purple-400 focus:border-purple-500 bg-gradient-to-r from-white to-purple-50 flex items-center" placeholder="Your answer...">
+                <button id="enter-btn" class="absolute right-2 top-2 w-12 h-12 bg-green-500 hover:bg-green-600 text-white rounded-xl text-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg">
+                    ↵
                 </button>
             </div>
 
@@ -330,21 +376,25 @@
             <div id="keypad" class="mt-6 w-full max-w-md mx-auto">
                 <!-- Number Grid -->
                 <div class="grid grid-cols-3 gap-3 mb-3 justify-items-center">
-                    <button class="keypad-btn btn-blue" data-key="1">1</button>
-                    <button class="keypad-btn btn-green" data-key="2">2</button>
-                    <button class="keypad-btn btn-pink" data-key="3">3</button>
-                    <button class="keypad-btn btn-orange" data-key="4">4</button>
-                    <button class="keypad-btn btn-purple" data-key="5">5</button>
-                    <button class="keypad-btn btn-blue" data-key="6">6</button>
-                    <button class="keypad-btn btn-green" data-key="7">7</button>
-                    <button class="keypad-btn btn-pink" data-key="8">8</button>
-                    <button class="keypad-btn btn-orange" data-key="9">9</button>
+                    <button data-key="1" class="block p-4 w-full bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-2xl cursor-pointer hover:from-blue-500 hover:to-blue-700 active:scale-95 transition-all duration-200 text-2xl font-bold shadow-lg">1</button>
+                    <button data-key="2" class="block p-4 w-full bg-gradient-to-br from-green-400 to-green-600 text-white rounded-2xl cursor-pointer hover:from-green-500 hover:to-green-700 active:scale-95 transition-all duration-200 text-2xl font-bold shadow-lg">2</button>
+                    <button data-key="3" class="block p-4 w-full bg-gradient-to-br from-pink-400 to-pink-600 text-white rounded-2xl cursor-pointer hover:from-pink-500 hover:to-pink-700 active:scale-95 transition-all duration-200 text-2xl font-bold shadow-lg">3</button>
+                    <button data-key="4" class="block p-4 w-full bg-gradient-to-br from-yellow-400 to-orange-500 text-white rounded-2xl cursor-pointer hover:from-yellow-500 hover:to-orange-600 active:scale-95 transition-all duration-200 text-2xl font-bold shadow-lg">4</button>
+                    <button data-key="5" class="block p-4 w-full bg-gradient-to-br from-purple-400 to-purple-600 text-white rounded-2xl cursor-pointer hover:from-purple-500 hover:to-purple-700 active:scale-95 transition-all duration-200 text-2xl font-bold shadow-lg">5</button>
+                    <button data-key="6" class="block p-4 w-full bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-2xl cursor-pointer hover:from-blue-500 hover:to-blue-700 active:scale-95 transition-all duration-200 text-2xl font-bold shadow-lg">6</button>
+                    <button data-key="7" class="block p-4 w-full bg-gradient-to-br from-green-400 to-green-600 text-white rounded-2xl cursor-pointer hover:from-green-500 hover:to-green-700 active:scale-95 transition-all duration-200 text-2xl font-bold shadow-lg">7</button>
+                    <button data-key="8" class="block p-4 w-full bg-gradient-to-br from-pink-400 to-pink-600 text-white rounded-2xl cursor-pointer hover:from-pink-500 hover:to-pink-700 active:scale-95 transition-all duration-200 text-2xl font-bold shadow-lg">8</button>
+                    <button data-key="9" class="block p-4 w-full bg-gradient-to-br from-yellow-400 to-orange-500 text-white rounded-2xl cursor-pointer hover:from-yellow-500 hover:to-orange-600 active:scale-95 transition-all duration-200 text-2xl font-bold shadow-lg">9</button>
                 </div>
                 <!-- Bottom Row -->
                 <div class="grid grid-cols-3 gap-3 justify-items-center">
-                    <div></div> <!-- Empty space -->
-                    <button class="keypad-btn btn-purple" data-key="0">0</button>
-                    <div></div> <!-- Empty space -->
+                    <button id="backspace-btn" class="block p-4 w-full bg-gradient-to-br from-red-400 to-red-600 text-white rounded-2xl cursor-pointer hover:from-red-500 hover:to-red-700 active:scale-95 transition-all duration-200 text-2xl font-bold shadow-lg flex items-center justify-center">
+                        ⌫
+                    </button>
+                    <button data-key="0" class="block p-4 w-full bg-gradient-to-br from-purple-400 to-purple-600 text-white rounded-2xl cursor-pointer hover:from-purple-500 hover:to-purple-700 active:scale-95 transition-all duration-200 text-2xl font-bold shadow-lg">0</button>
+                    <button id="numpad-enter" class="block p-4 w-full bg-gradient-to-br from-green-400 to-green-600 text-white rounded-2xl cursor-pointer hover:from-green-500 hover:to-green-700 active:scale-95 transition-all duration-200 text-2xl font-bold shadow-lg flex items-center justify-center">
+                        ↵
+                    </button>
                 </div>
             </div>
 
@@ -426,7 +476,7 @@
         const playAgainBtn = document.getElementById('play-again-btn');
         const answerInput = document.getElementById('answer');
         const keypad = document.getElementById('keypad');
-        const backspaceBtn = document.getElementById('backspace-btn');
+        const enterBtn = document.getElementById('enter-btn');
         
         // Game State
         let gameState = {};
@@ -449,8 +499,15 @@
         
         // --- Navigation ---
         function showScreen(screenName) {
+            // Hide all screens
             Object.values(screens).forEach(screen => screen.classList.remove('active'));
+            // Show the requested screen
             screens[screenName].classList.add('active');
+            
+            // Play appropriate sound based on screen
+            if (screenName === 'setup') {
+                document.getElementById('selectSound').play().catch(e => console.log('Could not play select sound:', e));
+            }
         }
 
         startSetupBtn.addEventListener('click', () => {
@@ -467,14 +524,15 @@
             gameState.age = age;
 
             // Set initial difficulty based on age - start easier for younger kids
-            if (age <= 6) {
-                gameState.difficulty = 1; // Very simple single digits
+            // Start with basic difficulty for all ages, but allow progression to highest levels
+            if (age < 4) {
+                gameState.difficulty = 1; // Start with very basic for youngest players
+            } else if (age <= 6) {
+                gameState.difficulty = 2; // Slightly higher start for ages 4-6
             } else if (age <= 9) {
-                gameState.difficulty = 2; // Slightly larger numbers
-            } else if (age <= 12) {
-                gameState.difficulty = 4; // More challenging
+                gameState.difficulty = 3; // Intermediate start for ages 7-9
             } else {
-                gameState.difficulty = 6; // Advanced level
+                gameState.difficulty = 4; // Higher start for ages 10+
             }
 
             showScreen('setup');
@@ -544,10 +602,19 @@
         });
 
         // Backspace button functionality
-        backspaceBtn.addEventListener('click', () => {
-            const currentValue = answerInput.value;
-            answerInput.value = currentValue.slice(0, -1);
+        document.getElementById('backspace-btn').addEventListener('click', () => {
+            answerInput.value = answerInput.value.slice(0, -1);
             answerInput.focus();
+        });
+
+        // Numpad enter button functionality
+        document.getElementById('numpad-enter').addEventListener('click', () => {
+            submitAnswerBtn.click();
+        });
+
+        // Enter button functionality
+        enterBtn.addEventListener('click', () => {
+            submitAnswerBtn.click();
         });
 
         // --- Game Logic ---
@@ -565,25 +632,19 @@
         function updateDifficultyDisplay() {
             let difficultyText = '🌱 Learning';
 
-            // Age-appropriate difficulty labels
-            if (gameState.age <= 6) {
-                if (gameState.difficulty <= 2) difficultyText = '🌱 Learning';
-                else if (gameState.difficulty <= 4) difficultyText = '⭐ Growing';
-                else if (gameState.difficulty <= 7) difficultyText = '🚀 Amazing';
-                else if (gameState.difficulty <= 10) difficultyText = '🔥 Superstar';
-                else difficultyText = '🧠 Genius Kid';
-            } else if (gameState.age <= 9) {
-                if (gameState.difficulty <= 3) difficultyText = '🌱 Beginner';
-                else if (gameState.difficulty <= 6) difficultyText = '⭐ Good';
-                else if (gameState.difficulty <= 9) difficultyText = '🚀 Great';
-                else if (gameState.difficulty <= 12) difficultyText = '🔥 Excellent';
-                else difficultyText = '🧠 Math Wizard';
+            // Unified difficulty levels for all ages
+            if (gameState.difficulty <= 3) {
+                difficultyText = '🌱 Beginner';
+            } else if (gameState.difficulty <= 6) {
+                difficultyText = '⭐ Novice';
+            } else if (gameState.difficulty <= 9) {
+                difficultyText = '🚀 Advanced';
+            } else if (gameState.difficulty <= 12) {
+                difficultyText = '🔥 Expert';
+            } else if (gameState.difficulty <= 15) {
+                difficultyText = '🎯 Master';
             } else {
-                if (gameState.difficulty <= 4) difficultyText = '🌱 Starter';
-                else if (gameState.difficulty <= 7) difficultyText = '⭐ Intermediate';
-                else if (gameState.difficulty <= 10) difficultyText = '🚀 Advanced';
-                else if (gameState.difficulty <= 15) difficultyText = '🔥 Expert';
-                else difficultyText = '🧠 Genius';
+                difficultyText = '🧠 Grand Master';
             }
 
             document.getElementById('difficulty-display').innerHTML = `🎯 Level: ${difficultyText}`;
@@ -600,24 +661,35 @@
             const operator = gameState.operators[Math.floor(Math.random() * gameState.operators.length)];
             let num1, num2, answer;
 
-            // Age-based initial difficulty with adaptive scaling
+            // Unified difficulty scaling for all ages
             let baseMaxNum, baseMinNum, multiplicationMax;
-
-            if (gameState.age <= 6) {
-                // Ages 1-6: Start with single digits, scale with difficulty
-                baseMaxNum = Math.min(9, 3 + gameState.difficulty);
+            
+            // Scale number ranges based on difficulty level (1-20+)
+            if (gameState.difficulty <= 3) {
+                // Beginner: 1-digit numbers
                 baseMinNum = 1;
-                multiplicationMax = Math.min(5, 2 + Math.floor(gameState.difficulty / 3));
-            } else if (gameState.age <= 9) {
-                // Ages 7-9: Start with slightly larger numbers
-                baseMaxNum = Math.min(20, 5 + gameState.difficulty * 2);
-                baseMinNum = gameState.difficulty > 3 ? 2 : 1;
-                multiplicationMax = Math.min(10, 3 + Math.floor(gameState.difficulty / 2));
+                baseMaxNum = 5 + gameState.difficulty;
+                multiplicationMax = 5;
+            } else if (gameState.difficulty <= 7) {
+                // Novice: 1-2 digit numbers
+                baseMinNum = 1;
+                baseMaxNum = 10 + (gameState.difficulty * 2);
+                multiplicationMax = 10;
+            } else if (gameState.difficulty <= 12) {
+                // Advanced: 2-3 digit numbers
+                baseMinNum = 10;
+                baseMaxNum = 50 + ((gameState.difficulty - 7) * 20);
+                multiplicationMax = 15;
+            } else if (gameState.difficulty <= 15) {
+                // Expert: 3-4 digit numbers
+                baseMinNum = 50;
+                baseMaxNum = 200 + ((gameState.difficulty - 12) * 100);
+                multiplicationMax = 20;
             } else {
-                // Ages 10+: More challenging from the start
-                baseMaxNum = Math.min(50, 10 + gameState.difficulty * 3);
-                baseMinNum = gameState.difficulty > 2 ? gameState.difficulty : 1;
-                multiplicationMax = Math.min(12, 4 + Math.floor(gameState.difficulty / 2));
+                // Master: 4 digit numbers and beyond
+                baseMinNum = 100;
+                baseMaxNum = 1000 + ((gameState.difficulty - 15) * 200);
+                multiplicationMax = 25;
             }
 
             if (operator === '+') {
@@ -645,16 +717,22 @@
                     answer = num1 - num2;
                 }
             } else if (operator === '*') {
-                num1 = Math.floor(Math.random() * multiplicationMax) + 1;
-                num2 = Math.floor(Math.random() * multiplicationMax) + 1;
-                answer = num1 * num2;
-
-                // For young kids, start with very simple multiplication
-                if (gameState.age <= 6 && gameState.difficulty <= 5) {
-                    num1 = Math.min(num1, 3);
-                    num2 = Math.min(num2, 3);
-                    answer = num1 * num2;
+                const maxFactor = Math.min(multiplicationMax, Math.ceil(Math.sqrt(baseMaxNum)));
+                
+                if (gameState.difficulty <= 5) {
+                    // Simple multiplication tables at lower levels
+                    num1 = Math.floor(Math.random() * (maxFactor - 1)) + 2;
+                    num2 = Math.floor(Math.random() * (maxFactor - 1)) + 2;
+                } else if (gameState.difficulty <= 10) {
+                    // Larger numbers, but one factor is still small
+                    num1 = Math.floor(Math.random() * (maxFactor * 2 - 1)) + 2;
+                    num2 = Math.floor(Math.random() * (maxFactor - 1)) + 2;
+                } else {
+                    // Full range multiplication at higher levels
+                    num1 = Math.floor(Math.random() * (maxFactor - 1)) + 2;
+                    num2 = Math.floor(Math.random() * (maxFactor - 1)) + 2;
                 }
+                answer = num1 * num2;
             } else if (operator === '/') {
                 // Division: ensure whole number results
                 const divisor = Math.floor(Math.random() * multiplicationMax) + 1;
@@ -662,11 +740,11 @@
                 num1 = divisor * answer;
                 num2 = divisor;
 
-                // For young kids, keep division very simple
+                // For young kids, start with very simple division
                 if (gameState.age <= 6 && gameState.difficulty <= 5) {
-                    answer = Math.min(answer, 5);
+                    num1 = Math.min(num1, 9);
                     num2 = Math.min(num2, 3);
-                    num1 = num2 * answer;
+                    answer = num1 / num2;
                 }
             }
 
@@ -714,6 +792,9 @@
             if (userAnswer === correctAnswer) {
                 gameState.totalCorrectAnswers++;
                 gameState.score += gameState.difficulty * 10;
+                
+                // Play correct answer sound
+                document.getElementById('correctSound').play().catch(e => console.log('Could not play sound:', e));
 
                 // Fun encouraging messages
                 const correctMessages = [
@@ -728,7 +809,7 @@
                 ];
 
                 feedbackEl.innerText = correctMessages[Math.floor(Math.random() * correctMessages.length)];
-                feedbackEl.classList.add('text-green-500');
+                feedbackEl.className = 'text-green-300 text-sm sm:text-base md:text-lg transition-all duration-200';
                 questionContainer.classList.add('correct-animation');
 
                 // Add stars based on speed
@@ -761,8 +842,11 @@
                     `✨ Good thinking! The answer was ${correctAnswer}. Try again!`
                 ];
 
+                // Play wrong answer sound
+                document.getElementById('wrongSound').play().catch(e => console.log('Could not play sound:', e));
+                
                 feedbackEl.innerText = encouragingMessages[Math.floor(Math.random() * encouragingMessages.length)];
-                feedbackEl.classList.add('text-orange-500');
+                feedbackEl.className = 'text-orange-500 text-sm sm:text-base md:text-lg transition-all duration-200';
                 questionContainer.classList.add('incorrect-animation');
                 starsDisplay.innerText = "💪";
 
@@ -837,6 +921,9 @@
             document.getElementById('correct-count').innerText = gameState.totalCorrectAnswers;
             document.getElementById('avg-time').innerText = (gameState.totalAnswerTime / gameState.totalQuestionsAnswered).toFixed(1) + 's';
 
+            // Play end sound
+            document.getElementById('endSound').play().catch(e => console.log('Could not play end sound:', e));
+
             // Celebration confetti for good performance
             if (mathPower >= 110 || accuracy >= 80) {
                 setTimeout(createConfetti, 500);
@@ -849,6 +936,18 @@
         // Initial setup
         resetGameState();
         showScreen('welcome');
+        
+        // Play welcome sound on first interaction
+        const playWelcomeSound = () => {
+            document.getElementById('welcomeSound').play().catch(e => console.log('Could not play welcome sound:', e));
+            // Remove the event listener after first interaction
+            document.removeEventListener('click', playWelcomeSound);
+            document.removeEventListener('keydown', playWelcomeSound);
+        };
+        
+        // Add event listeners for first interaction
+        document.addEventListener('click', playWelcomeSound, { once: true });
+        document.addEventListener('keydown', playWelcomeSound, { once: true });
     </script>
 </body>
 </html>

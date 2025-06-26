@@ -1,38 +1,38 @@
 # 🎯 Math Adventure Game for Kids! 🌟
 
-A fun, interactive math practice game designed specifically for children aged 4-12. This colorful, engaging web application helps kids improve their math skills through gamified learning with adaptive difficulty, encouraging feedback, and exciting animations!
+A fun, interactive math practice game designed specifically for children aged 4-12. This colorful, engaging web application helps kids improve their math skills through gamified learning with adaptive difficulty, encouraging feedback, and exciting animations! It's a single, offline-ready HTML file that runs anywhere.
 
 ## 🚀 Features
 
 ### 🎮 Kid-Friendly Design
-- **Colorful & Engaging UI** - Bright gradients, fun emojis, and playful animations
-- **Mobile-First Design** - Touch-friendly interface perfect for tablets and phones
-- **Interactive Keypad** - Large, colorful number buttons with emoji indicators
-- **Celebration Animations** - Confetti effects and star ratings for achievements
+- **Colorful & Engaging UI** - Bright gradients, fun emojis, and playful animations.
+- **Mobile-First Design** - Touch-friendly interface perfect for tablets and phones.
+- **Interactive Keypad** - Large, colorful number buttons for easy input.
+- **Celebration Animations** - Confetti effects and star ratings for achievements.
 
 ### 🧮 Educational Features
-- **Four Math Operations** - Addition ➕, Subtraction ➖, Multiplication ✖️, Division ➗
-- **Adaptive Difficulty** - Automatically adjusts based on performance and speed
-- **Age-Appropriate Content** - Difficulty scales based on child's age (4-12 years)
-- **Progress Tracking** - Visual progress bars and achievement badges
+- **Four Math Operations** - Addition ➕, Subtraction ➖, Multiplication ✖️, and Division ➗.
+- **Adaptive Difficulty** - Automatically adjusts question difficulty based on the player's age, speed, and accuracy.
+- **Age-Appropriate Content** - Problems scale to be suitable for children from ages 4 to 12.
+- **Progress Tracking** - A visual progress bar shows advancement through a session.
 
 ### 🌟 Motivational Elements
-- **Positive Reinforcement** - Encouraging messages for both correct and incorrect answers
-- **Achievement System** - Star ratings, badges, and "Math Power Level" scoring
-- **Fun Feedback** - Playful animations and celebratory effects
-- **No Pressure Environment** - Focus on learning and improvement, not perfection
+- **Positive Reinforcement** - Encouraging messages for both correct and incorrect answers to build confidence.
+- **Gamified Scoring** - Earn points for each correct answer, with more points awarded for higher difficulty levels.
+- **Unique "Math Power Level"** - At the end of a session, the game calculates a fun "Math Power Level" based on difficulty, accuracy, and speed, complete with a special achievement badge!
+- **Fun Feedback** - Playful animations and celebratory effects make learning exciting.
 
 ### ⚡ Technical Features
-- **Responsive Design** - Works on desktop, tablet, and mobile devices
-- **No Installation Required** - Runs directly in web browser
-- **Offline Capable** - Works without internet connection once loaded
-- **Fast & Lightweight** - Quick loading and smooth performance
+- **Fully Responsive** - Works seamlessly on desktop, tablet, and mobile devices.
+- **Zero Installation** - A single `index.html` file that runs directly in any modern web browser.
+- **Offline Ready** - Works without an internet connection once loaded, making it safe and accessible anywhere.
+- **Fast & Lightweight** - Optimized for quick loading and smooth performance.
 
 ## 🎯 How to Play
 
 ### 1. Welcome Screen 👋
-- Enter your name and age
-- The game will automatically set appropriate difficulty levels
+- Enter your name and age.
+- The game uses this to set an appropriate starting difficulty level.
 
 ### 2. Choose Your Math Powers ⚡
 - Select which math operations you want to practice:
@@ -42,11 +42,11 @@ A fun, interactive math practice game designed specifically for children aged 4-
   - **Division** ➗ - Share equally! 🎪
 
 ### 3. Math Adventure Time! 🎮
-- Solve math problems as they appear
-- Use the colorful keypad or keyboard to enter answers
-- Get instant feedback with fun animations
-- Earn stars ⭐ for quick, correct answers
-- Watch your Math Power Level grow! 📈
+- Solve the math problems that appear on the screen.
+- Use the colorful on-screen keypad, your physical keyboard, or touch input to enter answers. A backspace button is available for corrections.
+- Get instant feedback with fun animations for correct and incorrect answers.
+- Earn stars ⭐ for answering quickly and correctly.
+- Watch your score and progress bar grow with each question! 📈
 
 ### 4. Celebrate Your Success! 🎉
 - View your final score and achievements
