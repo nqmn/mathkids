@@ -498,6 +498,18 @@
         // Game State
         let gameState = {};
 
+        function setInitialDifficulty(age) {
+            if (age < 4) {
+                gameState.difficulty = 1; // Start with very basic for youngest players
+            } else if (age <= 6) {
+                gameState.difficulty = 2; // Slightly higher start for ages 4-6
+            } else if (age <= 9) {
+                gameState.difficulty = 3; // Intermediate start for ages 7-9
+            } else {
+                gameState.difficulty = 4; // Higher start for ages 10+
+            }
+        }
+
         function resetGameState() {
             gameState = {
                 name: '',
@@ -540,17 +552,7 @@
             gameState.name = name;
             gameState.age = age;
 
-            // Set initial difficulty based on age - start easier for younger kids
-            // Start with basic difficulty for all ages, but allow progression to highest levels
-            if (age < 4) {
-                gameState.difficulty = 1; // Start with very basic for youngest players
-            } else if (age <= 6) {
-                gameState.difficulty = 2; // Slightly higher start for ages 4-6
-            } else if (age <= 9) {
-                gameState.difficulty = 3; // Intermediate start for ages 7-9
-            } else {
-                gameState.difficulty = 4; // Higher start for ages 10+
-            }
+            setInitialDifficulty(age);
 
             showScreen('setup');
         });
@@ -705,10 +707,14 @@
                     // Beginner: sums up to 10
                     num1 = Math.floor(Math.random() * 9) + 1; // 1-9
                     num2 = Math.floor(Math.random() * (10 - num1)) + 1; // Ensure sum <= 10
-                } else if (gameState.difficulty <= 6) {
-                    // Novice: sums up to 100 (2-digit numbers)
-                    num1 = Math.floor(Math.random() * 90) + 10; // 10-99
-                    num2 = Math.floor(Math.random() * 90) + 10; // 10-99
+                } else if (gameState.difficulty <= 5) {
+                    // Novice (easier part): sums up to 20, single digit + single digit or small two-digit
+                    num1 = Math.floor(Math.random() * 10) + 1; // 1-10
+                    num2 = Math.floor(Math.random() * (20 - num1)) + 1; // Ensure sum <= 20
+                } else if (gameState.difficulty === 6) {
+                    // Novice (harder part): sums up to 100 (2-digit numbers, some carrying)
+                    num1 = Math.floor(Math.random() * 30) + 10; // 10-39
+                    num2 = Math.floor(Math.random() * (50 - num1 - 1)) + 1; // Ensure sum <= 50
                 } else if (gameState.difficulty <= 9) {
                     // Advanced: sums up to 1000 (3-digit numbers)
                     num1 = Math.floor(Math.random() * 900) + 100; // 100-999
@@ -1059,7 +1065,7 @@
         playAgainBtn.addEventListener('click', () => {
             // Don't reset game state completely to keep name and age
             gameState.score = 0;
-            gameState.difficulty = 5;
+            setInitialDifficulty(gameState.age);
             gameState.totalCorrectAnswers = 0;
             gameState.totalQuestionsAnswered = 0;
             gameState.totalAnswerTime = 0;

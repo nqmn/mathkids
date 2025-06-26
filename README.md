@@ -40,6 +40,14 @@ The game's difficulty level (from 1 to 15+) is dynamic and adjusts in real-time 
 
 This adaptive system ensures that the questions are always tailored to your current skill level, providing an optimal learning experience, with each operation's number range adjusting dynamically.
 
+Specifically for **Addition**:
+- **Beginner (difficulty <= 3):** Sums up to 10 (e.g., 3 + 5).
+- **Novice (difficulty 4-5):** Sums up to 20 (e.g., 7 + 8, 12 + 5).
+- **Novice (difficulty 6):** Sums up to 50, with numbers between 10 and 39 (e.g., 25 + 18, 30 + 15).
+- **Advanced (difficulty 7-9):** Sums up to 1000 (e.g., 123 + 456).
+- **Expert (difficulty 10-12):** Sums up to 5000 (e.g., 1234 + 3456).
+- **Master (difficulty 13+):** Sums up to 10000+ (e.g., 5678 + 9123).
+
 ### ⭐ Score Calculation
 
 Your in-game score reflects your progress and accuracy during a session:
