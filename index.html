@@ -452,9 +452,17 @@
             <p class="text-xs text-gray-500 mt-4 italic">
                 💡 This is a fun game score to celebrate your math skills! Keep practicing to get even better! 🚀
             </p>
-            <button id="play-again-btn" class="fun-btn mt-6 w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white fredoka text-2xl py-4 rounded-2xl shadow-lg">
-                🎮 Play Again! 🌟
-            </button>
+            <div class="grid grid-cols-2 gap-4 mt-6">
+                <button id="whatsapp-share-btn" class="fun-btn bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white fredoka text-xl py-4 rounded-2xl shadow-lg flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="mr-2">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.966-.273-.099-.471-.148-.67.15-.197.297-.767.963-.94 1.16-.173.199-.347.222-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.795-1.484-1.781-1.66-2.08-.173-.298-.018-.46.13-.607.136-.129.296-.336.445-.504.149-.167.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.488-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.361.195 1.871.118.571-.085 1.758-.719 2.005-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-6.29 7.618h-.009c-1.77 0-3.524-.48-5.055-1.38l-.361-.216-3.75.975 1.005-3.645-.239-.375a9.878 9.878 0 0 1-1.51-5.26c.003-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.896 6.994c-.006 5.462-4.44 9.89-9.902 9.89M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.462 0 .106 5.334.1 11.9c0 2.096.55 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.365 11.949-11.947 0-3.176-1.24-6.166-3.495-8.411"/>
+                    </svg>
+                    Share
+                </button>
+                <button id="play-again-btn" class="fun-btn bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white fredoka text-xl py-4 rounded-2xl shadow-lg">
+                    🎮 Play Again
+                </button>
+            </div>
         </div>
 
     </div>
@@ -932,6 +940,24 @@
 
             showScreen('results');
         }
+
+        // WhatsApp share functionality
+        document.getElementById('whatsapp-share-btn').addEventListener('click', () => {
+            const username = gameState.name || 'Math Whiz';
+            const score = document.getElementById('final-score').textContent;
+            const level = document.getElementById('iq-level-display').textContent;
+            const correct = document.getElementById('correct-count').textContent;
+            const avgTime = document.getElementById('avg-time').textContent;
+            
+            const text = `🎉 I just scored ${score} in Math Genius! 🧮\n\n` +
+                        `🏆 Difficulty: ${level}\n` +
+                        `✅ Correct Answers: ${correct}\n` +
+                        `⏱️ Average Time: ${avgTime}\n\n` +
+                        `Can you beat my score? Try it now @ https://mathkidz.vercel.app`;
+            
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        });
 
         // Initial setup
         resetGameState();
